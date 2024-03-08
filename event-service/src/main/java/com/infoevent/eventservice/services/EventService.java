@@ -1,9 +1,11 @@
 package com.infoevent.eventservice.services;
 
 import com.infoevent.eventservice.entities.Event;
+import com.infoevent.eventservice.entities.Price;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Interface for event management service.
@@ -15,9 +17,10 @@ public interface EventService {
      * Creates a new event.
      *
      * @param event The event to create.
+     * @Param prices List of price
      * @return The created event.
      */
-    Event createEvent(Event event);
+    Event createEvent(Event event, Set<Price> prices);
 
     /**
      * Finds an event by its ID.

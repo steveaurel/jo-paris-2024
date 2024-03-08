@@ -18,7 +18,7 @@ spring:
 
   datasource:
     url: jdbc:postgresql://postgresql-steve.alwaysdata.net/steve_user
-    username: steve_studi
+    username: steve_user
     password: 6Hpc4i!wrGReTmS
 
   jpa:

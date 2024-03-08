@@ -15,7 +15,7 @@ import java.util.List;
  * REST Controller for managing locations.
  */
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping("/locations")
 @Transactional
 @RequiredArgsConstructor
 @Slf4j

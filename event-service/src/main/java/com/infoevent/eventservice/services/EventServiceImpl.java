@@ -1,14 +1,18 @@
 package com.infoevent.eventservice.services;
 
 import com.infoevent.eventservice.entities.Event;
+import com.infoevent.eventservice.entities.Price;
 import com.infoevent.eventservice.repositories.EventRepository;
+import com.infoevent.eventservice.repositories.PriceRepository;
 import com.infoevent.eventservice.services.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Implementation of the {@link EventService}.
@@ -20,10 +24,13 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
+    private final PriceRepository priceRepository;
 
     @Override
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event, Set<Price> prices) {
         log.info("Creating new event: {}", event.getName());
+
+        prices.forEach(event::addPrice);
         return eventRepository.save(event);
     }
 
@@ -49,6 +56,7 @@ public class EventServiceImpl implements EventService {
                     existingEvent.setDate(event.getDate());
                     existingEvent.setTime(event.getTime());
                     existingEvent.setDuration(event.getDuration());
+                    existingEvent.setPrices(event.getPrices());
                     existingEvent.setVenueID(event.getVenueID());
                     return eventRepository.save(existingEvent);
                 }).orElseThrow(() -> new IllegalStateException("Event not found with ID: " + id));
@@ -65,6 +73,5 @@ public class EventServiceImpl implements EventService {
         log.info("Fetching events for venue ID: {}", venueID);
         return eventRepository.findByVenueID(venueID);
     }
-
 
 }

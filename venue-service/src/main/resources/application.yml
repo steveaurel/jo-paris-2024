@@ -18,7 +18,7 @@ spring:
 
   datasource:
     url: jdbc:postgresql://postgresql-steve.alwaysdata.net/steve_venue
-    username: steve
+    username: steve_venue
     password: 6Hpc4i!wrGReTmS
 
   jpa:
@@ -36,9 +36,11 @@ eureka:
     service-url:
       defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
 
-
-
-
-
-
-
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

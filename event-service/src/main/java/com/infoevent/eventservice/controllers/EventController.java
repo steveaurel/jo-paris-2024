@@ -1,6 +1,9 @@
 package com.infoevent.eventservice.controllers;
 
+import com.infoevent.eventservice.client.VenueRestClient;
 import com.infoevent.eventservice.entities.Event;
+import com.infoevent.eventservice.entities.Price;
+import com.infoevent.eventservice.entities.Venue;
 import com.infoevent.eventservice.services.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * REST Controller for managing events.
@@ -16,12 +20,13 @@ import java.util.List;
  * as well as fetching events for a specific venue.
  */
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/events")
 @RequiredArgsConstructor
 @Slf4j
 public class EventController {
 
     private final EventService eventService;
+    private final VenueRestClient venueRestClient;
 
     /**
      * Creates a new event.
@@ -32,7 +37,8 @@ public class EventController {
     @PostMapping
     public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) {
         log.info("API call to create event: {}", event.getName());
-        Event createdEvent = eventService.createEvent(event);
+        Set<Price> prices = event.getPrices();
+        Event createdEvent = eventService.createEvent(event, prices);
         return ResponseEntity.ok(createdEvent);
     }
 
@@ -46,7 +52,15 @@ public class EventController {
     public ResponseEntity<Event> findEventById(@PathVariable Long id) {
         log.info("API call to find event by ID: {}", id);
         return eventService.findEventById(id)
-                .map(ResponseEntity::ok)
+                .map(event -> {
+                    try {
+                        Venue venue = venueRestClient.getVenueById(event.getVenueID());
+                        event.setVenue(venue);
+                    } catch (Exception e) {
+                        log.error("Failed to retrieve venue details for event ID: {}", id, e);
+                    }
+                    return ResponseEntity.ok(event);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -59,6 +73,14 @@ public class EventController {
     public ResponseEntity<List<Event>> findAllEvents() {
         log.info("API call to list all events");
         List<Event> events = eventService.findAllEvents();
+        events.forEach(event -> {
+            try {
+                Venue venue = venueRestClient.getVenueById(event.getVenueID());
+                event.setVenue(venue);
+            } catch (Exception e) {
+                log.error("Failed to retrieve venue details for event ID: {}", event.getId(), e);
+            }
+        });
         return ResponseEntity.ok(events);
     }
 

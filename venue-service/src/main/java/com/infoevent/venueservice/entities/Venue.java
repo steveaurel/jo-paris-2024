@@ -13,8 +13,9 @@ public class Venue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
+    @Column(nullable = false)
     private int capacity;
     @OneToOne
     private Location location;

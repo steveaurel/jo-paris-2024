@@ -16,7 +16,7 @@ import java.util.List;
  * Provides endpoints for creating, updating, deleting, and fetching venues.
  */
 @RestController
-@RequestMapping("/api/venues")
+@RequestMapping("/venues")
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
