@@ -1,6 +1,7 @@
 package com.infoevent.eventservice.repositories;
 
 import com.infoevent.eventservice.entities.Event;
+import com.infoevent.eventservice.entities.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      * @return A list of events associated with the given venue ID.
      */
     List<Event> findByVenueID(Long venueID);
+
+    List<Event> findAllByEventStatusNotIn(List<EventStatus> suspended);
 }

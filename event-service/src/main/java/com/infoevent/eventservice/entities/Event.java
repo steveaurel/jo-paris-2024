@@ -50,6 +50,14 @@ public class Event {
     @Transient
     private Venue venue;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EventStatus eventStatus;
+
+    @Column(nullable = false)
+    private int seatAvailable;
+
+
     public void addPrice(Price price) {
         prices.add(price);
         price.setEvent(this);
@@ -60,4 +68,3 @@ public class Event {
         price.setEvent(null);
     }
 }
-

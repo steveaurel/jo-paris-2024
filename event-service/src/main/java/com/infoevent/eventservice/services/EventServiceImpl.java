@@ -24,7 +24,6 @@ import java.util.Set;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final PriceRepository priceRepository;
 
     @Override
     public Event createEvent(Event event, Set<Price> prices) {

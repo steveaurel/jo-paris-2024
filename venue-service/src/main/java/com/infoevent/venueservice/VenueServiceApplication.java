@@ -1,9 +1,13 @@
 package com.infoevent.venueservice;
 
+import jakarta.transaction.Transactional;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
+@EnableFeignClients
+@Transactional
 public class VenueServiceApplication {
 
     public static void main(String[] args) {

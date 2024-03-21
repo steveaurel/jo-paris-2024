@@ -17,17 +17,30 @@ public class Ticket {
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private String firstName;
 
     @Column(nullable = false)
-    private Long eventId;
+    private String lastName;
 
-    @Enumerated(EnumType.STRING)
-    private TicketType ticketType;
+    @Column(nullable = false)
+    private Long userID;
+
+    @Column(nullable = false)
+    private Long eventID;
+
+    @Column(nullable = false)
+    private Long paymentID;
+
+    @Column(nullable = false)
+    private Long offerTypeID;
 
     @Column(nullable = false)
     private BigDecimal priceAmount;
 
     @Column(nullable = false)
-    private String qrCode;
+    @Lob
+    private byte[] qrCode;
+
+    @Column(nullable = false, unique = true)
+    private String key;
 }

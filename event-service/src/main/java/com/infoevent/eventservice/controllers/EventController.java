@@ -2,6 +2,7 @@ package com.infoevent.eventservice.controllers;
 
 import com.infoevent.eventservice.client.VenueRestClient;
 import com.infoevent.eventservice.entities.Event;
+import com.infoevent.eventservice.entities.EventStatus;
 import com.infoevent.eventservice.entities.Price;
 import com.infoevent.eventservice.entities.Venue;
 import com.infoevent.eventservice.services.EventService;
@@ -11,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -35,9 +39,27 @@ public class EventController {
      * @return ResponseEntity containing the created event.
      */
     @PostMapping
-    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) {
+    public ResponseEntity<?> createEvent(@Valid @RequestBody Event event) {
         log.info("API call to create event: {}", event.getName());
+
+        LocalDateTime eventDateTime = LocalDateTime.of(event.getDate(), event.getTime());
+
+        LocalDateTime oneHourFromNow = LocalDateTime.now(ZoneId.systemDefault()).plusHours(1);
+
+        if (eventDateTime.isBefore(oneHourFromNow)) {
+            return ResponseEntity.badRequest().body("L'événement doit être programmé au moins une heure après l'heure actuelle.");
+        }
+
+        Venue venue = venueRestClient.getVenueById(event.getVenueID());
+        if (venue == null) {
+            return ResponseEntity.badRequest().body("Emplacement spécifié introuvable.");
+        }
+        event.setSeatAvailable(venue.getCapacity());
+
         Set<Price> prices = event.getPrices();
+
+        // Imposta lo stato dell'evento su ATTIVO
+        event.setEventStatus(EventStatus.ACTIVE);
         Event createdEvent = eventService.createEvent(event, prices);
         return ResponseEntity.ok(createdEvent);
     }
@@ -123,4 +145,33 @@ public class EventController {
         List<Event> events = eventService.findEventsByVenueID(venueID);
         return ResponseEntity.ok(events);
     }
+
+    /**
+     * Updates the available seats for an event.
+     *
+     * @param id The ID of the event to update.
+     * @param seats The number of available seats to set.
+     * @return ResponseEntity containing the updated event or an appropriate error message.
+     */
+    @PatchMapping("/{id}/update-seats")
+    public ResponseEntity<?> updateEventSeats(@PathVariable Long id, @RequestParam int seats) {
+        log.info("API call to update available seats for event with ID: {} to {}", id, seats);
+
+        Optional<Event> existingEvent = eventService.findEventById(id);
+        if (!existingEvent.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event eventToUpdate = existingEvent.get();
+
+        if (seats < 0) {
+            return ResponseEntity.badRequest().body("Le nombre de place acheté ne peut etre negatif.");
+        }
+
+        eventToUpdate.setSeatAvailable(eventToUpdate.getSeatAvailable() - seats);
+        Event updatedEvent = eventService.updateEvent(id, eventToUpdate);
+
+        return ResponseEntity.ok(updatedEvent);
+    }
+
 }
