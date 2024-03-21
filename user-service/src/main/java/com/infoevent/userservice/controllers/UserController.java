@@ -1,6 +1,7 @@
 package com.infoevent.userservice.controllers;
 
 import com.infoevent.userservice.Services.UserService;
+import com.infoevent.userservice.clients.KeyGeneratorRestClient;
 import com.infoevent.userservice.entities.Role;
 import com.infoevent.userservice.entities.User;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final KeyGeneratorRestClient keyGeneratorRestClient;
 
 
     /**
@@ -58,8 +60,16 @@ public class UserController {
     @PostMapping("/")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         log.info("API call to create a new user");
-        user.setRole(Role.USER);
+
+        if (user.getRole() == null) {
+            user.setRole(Role.USER);
+        }
+
+        String key = keyGeneratorRestClient.getKeyGenerator();
+        user.setKey(key);
+
         User createdUser = userService.createUser(user);
+
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
