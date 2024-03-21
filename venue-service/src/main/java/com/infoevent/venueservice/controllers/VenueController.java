@@ -17,7 +17,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/venues")
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class VenueController {

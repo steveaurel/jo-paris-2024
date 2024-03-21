@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
