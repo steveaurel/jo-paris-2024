@@ -2,7 +2,6 @@ package com.infoevent.venueservice.controllers;
 
 import com.infoevent.venueservice.services.LocationService;
 import com.infoevent.venueservice.entities.Location;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,13 @@ import java.util.List;
 public class LocationController {
 
     private final LocationService locationService;
+    @GetMapping("/{id}")
+    public ResponseEntity<Location> getLocationsById(@PathVariable Long id) {
+        log.info("API call to fetch location by id: {}", id);
+        return locationService.getLocationById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @PostMapping("/")
     public ResponseEntity<Location> createLocation(@Valid @RequestBody Location location) {

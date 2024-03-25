@@ -16,7 +16,7 @@ import java.util.List;
  * as well as fetching payments for a specific event and user.
  */
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/payments")
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentController {

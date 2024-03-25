@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(name = "NOTIFICATION-SERVICE")
 public interface NotificationRestClient {
-    @PostMapping("/notification/confirmation")
+    @PostMapping("/notifications/confirmation")
     @CircuitBreaker(name = "notificationservice", fallbackMethod = "sendDefaultMail")
     void sendNotification(@PathVariable NotificationRequest notificationRequest);
 }
