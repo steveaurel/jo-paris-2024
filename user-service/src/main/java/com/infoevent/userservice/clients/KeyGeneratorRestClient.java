@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(name = "KEY-GENERATOR-SERVICE")
 public interface KeyGeneratorRestClient {
 
-    @GetMapping("/generate-key")
+    @GetMapping("/generate-key/")
     @CircuitBreaker(name = "keygeneratorservice", fallbackMethod = "getDefaultKey")
     String getKeyGenerator();
 

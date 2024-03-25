@@ -2,6 +2,10 @@ server:
   port: 8082
   forward-headers-strategy: framework
 
+jwt:
+  secret: MiAVzqUXy5Tfr1kVIGpPMiAVzqUXy5Tfr1kVIGpP
+  expiration: 86400
+
 springdoc:
   swagger-ui:
     path: '/swagger-ui.html'

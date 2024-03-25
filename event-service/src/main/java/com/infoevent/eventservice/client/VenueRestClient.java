@@ -14,7 +14,7 @@ public interface VenueRestClient {
     @CircuitBreaker(name = "venueservice", fallbackMethod = "getDefaultVenue")
     Venue getVenueById(@PathVariable Long id);
 
-    @GetMapping("/venues")
+    @GetMapping("/venues/")
     @CircuitBreaker(name = "venueservice", fallbackMethod = "getDefaultVenues")
     List<Venue> getAllVenues();
 

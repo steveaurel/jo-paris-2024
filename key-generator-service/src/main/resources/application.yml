@@ -11,11 +11,11 @@ spring:
   application:
     name: key-generator-service
 
-    cloud:
-      discovery:
-        enabled: true
-      config:
-        enabled: false
+  cloud:
+    discovery:
+      enabled: true
+    config:
+      enabled: false
 
 eureka:
   instance:
