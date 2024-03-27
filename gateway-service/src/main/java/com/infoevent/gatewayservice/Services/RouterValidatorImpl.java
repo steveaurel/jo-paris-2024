@@ -1,12 +1,12 @@
 package com.infoevent.gatewayservice.Services;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-@Service
+@Component
 @Slf4j // Enable logging for this class
 public class RouterValidatorImpl implements RouterValidator {
 

@@ -14,19 +14,12 @@ spring:
     discovery:
       enabled: true
     config:
-      enabled: false
+      enabled: true
 
-  datasource:
-    url: jdbc:postgresql://postgresql-steve.alwaysdata.net/steve_user
-    username: steve_user
-    password: 6Hpc4i!wrGReTmS
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:9999/}
 
 eureka:
   instance:

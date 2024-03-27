@@ -3,4 +3,11 @@ server:
 
 spring:
   application:
-    name: service-config
+    name: config-service
+  cloud:
+    config:
+      server:
+        git:
+          uri: file://C:\WorkSpace\Studi\jo-paris-2024\config-repo
+
+

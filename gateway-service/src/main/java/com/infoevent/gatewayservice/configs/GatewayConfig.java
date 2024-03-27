@@ -15,7 +15,8 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("user-service", r -> r.path("/users/**")
-                        .filters(f -> f.filter(filter))
+                        .filters(f -> f.filter(filter)
+                                .addRequestHeader("Authorization", "Bearer {token}"))
                         .uri("lb://user-service"))
                 .route("auth-service", r -> r.path("/auth/**")
                         .filters(f -> f.filter(filter))
