@@ -17,6 +17,6 @@ public class Venue {
     private String name;
     @Column(nullable = false)
     private int capacity;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Location location;
 }

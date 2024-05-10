@@ -11,7 +11,7 @@ public class NotificationUtils {
                 .price(offerType.getPrice().getAmount() + " €")
                 .qrCode(ticket.getQrCode())
                 .eventName(event.getName())
-                .dateTime(event.getDate().toString() + " " + event.getTime().toString())
+                .dateTime(event.getDate().toString() + " " + event.getStartTime().toString())
                 .venueName(venue.getName())
                 .location(venue.getLocation().getAddress() + ", " + venue.getLocation().getCity() + ", " + venue.getLocation().getCountry())
                 .build();

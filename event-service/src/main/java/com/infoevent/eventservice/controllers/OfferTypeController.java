@@ -24,7 +24,7 @@ public class OfferTypeController {
      * @param offerType The offer type to create, provided in the request body.
      * @return ResponseEntity containing the created offer type.
      */
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<OfferType> createOfferType(@Valid @RequestBody OfferType offerType) {
         OfferType createdOfferType = offerTypeService.createOfferType(offerType);
         return ResponseEntity.ok(createdOfferType);
@@ -48,7 +48,7 @@ public class OfferTypeController {
      *
      * @return ResponseEntity containing a list of all offer types.
      */
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<OfferType>> findAllOfferTypes() {
         List<OfferType> offerTypes = offerTypeService.findAllOfferTypes();
         return ResponseEntity.ok(offerTypes);

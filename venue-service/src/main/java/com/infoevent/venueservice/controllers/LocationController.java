@@ -28,7 +28,7 @@ public class LocationController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Location> createLocation(@Valid @RequestBody Location location) {
         log.info("API call to create a location");
         Location createdLocation = locationService.createLocation(location);
@@ -49,7 +49,7 @@ public class LocationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Location>> getAllLocations() {
         log.info("API call to fetch all locations");
         List<Location> locations = locationService.getAllLocations();

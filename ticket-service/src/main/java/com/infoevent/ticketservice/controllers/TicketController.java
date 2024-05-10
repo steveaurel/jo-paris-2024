@@ -22,7 +22,7 @@ import java.util.List;
  * as well as fetching tickets for a specific event and user.
  */
 @RestController
-@RequestMapping("/ticket")
+@RequestMapping("/tickets")
 @RequiredArgsConstructor
 @Slf4j
 public class TicketController {
@@ -60,18 +60,19 @@ public class TicketController {
             ticket.setQrCode(qrCodeImage);
 
 
-            Ticket createdTicket = ticketService.createTicket(ticket);
-
-
             Event event = eventRestClient.getEventById(ticket.getEventID());
             Venue venue = venueRestClient.getVenueById(event.getVenueID());
             OfferType offerType = eventRestClient.getOfferTypeById(ticket.getOfferTypeID());
 
 
+            Ticket createdTicket = ticketService.createTicket(ticket);
+
+
             sendTicketNotification(ticket, offerType, event, venue);
 
+            event.setSeatAvailable(event.getSeatAvailable() - offerType.getSeatQuantity());
 
-            eventRestClient.updateEventSeat(event.getId(), offerType.getSeatQuantity());
+            eventRestClient.updateEvent(event.getId(), event);
 
             return ResponseEntity.ok(createdTicket);
         } catch (Exception e) {
@@ -126,14 +127,13 @@ public class TicketController {
      */
     @GetMapping("/by-user/{userID}")
     public ResponseEntity<List<Ticket>> findTicketsByUserID(@PathVariable Long userID) {
-        log.info("API call to fetch tickets for event ID: {}", userID);
+        log.info("API call to fetch tickets for user ID: {}", userID);
         List<Ticket> tickets = ticketService.findTicketsByUserID(userID);
         return ResponseEntity.ok(tickets);
     }
 
     /**
      * Decodes a QR code image and verifies if it matches a stored ticket.
-     *
      * The method decodes the provided QR code image to a string and
      * attempts to match it with a combination of the user key and ticket key stored in the database.
      * It verifies the integrity and authenticity of the ticket QR code.

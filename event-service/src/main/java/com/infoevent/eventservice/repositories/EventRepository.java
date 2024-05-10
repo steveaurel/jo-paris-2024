@@ -5,6 +5,8 @@ import com.infoevent.eventservice.entities.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -20,5 +22,14 @@ public interface EventRepository extends JpaRepository<Event, Long> {
      */
     List<Event> findByVenueID(Long venueID);
 
+    List<Event> findAllByOrderByDateAscStartTimeAsc();
+
     List<Event> findAllByEventStatusNotIn(List<EventStatus> suspended);
+
+    List<Event> findAllByEventStatusOrderByDateAscStartTimeAsc(EventStatus status);
+
+    List<Event> findEventsByVenueIDAndEndTimeGreaterThanAndEndTimeLessThanAndDate(Long venueID, LocalTime start, LocalTime end, LocalDate date);
+
+    List<Event> findEventsByVenueIDAndStartTimeBetweenAndDate(Long venueID, LocalTime start, LocalTime end, LocalDate date);
+
 }

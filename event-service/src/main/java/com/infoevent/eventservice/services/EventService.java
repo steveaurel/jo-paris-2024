@@ -1,8 +1,10 @@
 package com.infoevent.eventservice.services;
 
 import com.infoevent.eventservice.entities.Event;
-import com.infoevent.eventservice.entities.Price;
+import com.infoevent.eventservice.entities.OfferType;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,10 +19,9 @@ public interface EventService {
      * Creates a new event.
      *
      * @param event The event to create.
-     * @Param prices List of price
      * @return The created event.
      */
-    Event createEvent(Event event, Set<Price> prices);
+    Event createEvent(Event event, Set<OfferType> offerTypes);
 
     /**
      * Finds an event by its ID.
@@ -60,4 +61,10 @@ public interface EventService {
      * @return A list of events associated with the venue.
      */
     List<Event> findEventsByVenueID(Long venueID);
+
+
+    List<Event> findAllActiveEvents();
+
+    boolean checkEventAvailability(Long venueID, LocalTime startTime, LocalTime endTime, LocalDate date);
+
 }

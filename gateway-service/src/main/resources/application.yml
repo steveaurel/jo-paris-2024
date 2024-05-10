@@ -1,17 +1,92 @@
 server:
   port: 8888
+  forward-headers-strategy: framework
+
+springdoc:
+  swagger-ui:
+    path: '/swagger-ui.html'
 
 spring:
   application:
     name: gateway-service
 
-eureka:
-  instance:
-    prefer-ip-address: true
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/users/**
+          filters:
+            - JwtTokenFilterFactory
 
-  client:
-    service-url:
-      defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: event-service
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/event/**
+            - Path=/offertypes/**
+            - Path=/prices/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: key-generator-service
+          uri: lb://KEY-GENERATOR-SERVICE
+          predicates:
+            - Path=/key-generator/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: notification-service
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/notifications/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: key-generator-service
+          uri: lb://KEY-GENERATOR-SERVICE
+          predicates:
+            - Path=/key-generator/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payments/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: ticket-service
+          uri: lb://TICKET-SERVICE
+          predicates:
+            - Path=/tickets/**
+          filters:
+            - JwtTokenFilterFactory
+
+        - id: venue-service
+          uri: lb://VENUE-SERVICE
+          predicates:
+            - Path=/venues/**
+            - Path=/locations/**
+          filters:
+            - JwtTokenFilterFactory
+
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
 
 management:
   endpoint:

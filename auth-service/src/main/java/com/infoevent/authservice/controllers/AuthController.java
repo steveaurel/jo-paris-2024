@@ -1,9 +1,9 @@
 package com.infoevent.authservice.controllers;
 
 import com.infoevent.authservice.entities.AuthRequest;
-import com.infoevent.authservice.entities.AuthResponse;
 import com.infoevent.authservice.entities.User;
 import com.infoevent.authservice.services.AuthService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class AuthController {
      * @return ResponseEntity containing the authentication response (e.g., JWT token) if registration is successful.
      */
     @PostMapping(value = "/sign-up")
-    public ResponseEntity<AuthResponse> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@Valid @RequestBody User user) {
         log.info("Received request to register user: {}", user.getEmail()); // Log the username attempting to register
         return ResponseEntity.ok(authService.register(user));
     }
@@ -41,11 +41,11 @@ public class AuthController {
      * @return ResponseEntity containing the authentication response (e.g., JWT token) if login is successful.
      */
     @PostMapping(value = "/sign-in")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<User> login(@Valid @RequestBody AuthRequest request) {
         log.info("Received login request for user: {}", request.getEmail()); // Log the username attempting to log in
         try {
-            AuthResponse authResponse = authService.login(request);
-            return ResponseEntity.ok(authResponse);
+            User user = authService.login(request);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             log.error("Login attempt failed for user: {}. Error: {}", request.getEmail(), e.getMessage()); // Log the error
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

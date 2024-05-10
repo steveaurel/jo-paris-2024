@@ -15,7 +15,7 @@ public class KeyGeneratorController {
 
     private final KeyGeneratorService keyGenerationService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public String generateKey() {
         return keyGenerationService.generateSecureRandomKey();
     }

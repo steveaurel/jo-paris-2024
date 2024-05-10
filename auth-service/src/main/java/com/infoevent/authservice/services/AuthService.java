@@ -1,7 +1,6 @@
 package com.infoevent.authservice.services;
 
 import com.infoevent.authservice.entities.AuthRequest;
-import com.infoevent.authservice.entities.AuthResponse;
 import com.infoevent.authservice.entities.User;
 
 /**
@@ -16,9 +15,9 @@ public interface AuthService {
      * encrypting the user's password, and storing the user information.
      *
      * @param user The user information to register.
-     * @return An {@link AuthResponse} containing the JWT token and other relevant authentication details.
+     * @return An {@link User} containing the JWT token and other relevant authentication details.
      */
-    AuthResponse register(User user);
+    User register(User user);
 
     /**
      * Authenticates a user based on the provided credentials.
@@ -26,9 +25,9 @@ public interface AuthService {
      * and returns the token along with any other necessary authentication details.
      *
      * @param request The authentication request containing the username and password.
-     * @return An {@link AuthResponse} containing the JWT token and other relevant authentication details.
+     * @return An {@link User} containing the JWT token and other relevant authentication details.
      */
-    AuthResponse login(AuthRequest request);
+    User login(AuthRequest request);
 
     /**
      * Validates the provided JWT token.

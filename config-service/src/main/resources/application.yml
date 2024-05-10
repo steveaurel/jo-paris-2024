@@ -8,6 +8,8 @@ spring:
     config:
       server:
         git:
-          uri: file://C:\WorkSpace\Studi\jo-paris-2024\config-repo
+          uri: http://gitlab.com/steveaurel/config-repo
+          default-label: master
+          clone-on-start: true
 
 

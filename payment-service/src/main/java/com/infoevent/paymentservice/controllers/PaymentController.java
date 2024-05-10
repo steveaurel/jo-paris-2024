@@ -82,7 +82,7 @@ public class PaymentController {
      */
     @GetMapping("/by-user/{userID}")
     public ResponseEntity<List<Payment>> findPaymentsByUserID(@PathVariable Long userID) {
-        log.info("API call to fetch payments for event ID: {}", userID);
+        log.info("API call to fetch payments for user ID: {}", userID);
         List<Payment> payments = paymentService.findPaymentsByUserID(userID);
         return ResponseEntity.ok(payments);
     }

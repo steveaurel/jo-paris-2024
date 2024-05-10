@@ -22,9 +22,13 @@ public class Event {
 
     private LocalDate date;
 
-    private LocalTime time;
+    private LocalTime startTime;
+
+    private LocalTime endTime;
 
     private Long venueID;
+
+    private EventStatus eventStatus;
 
     private int seatAvailable;
 }

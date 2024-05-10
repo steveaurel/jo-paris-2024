@@ -8,9 +8,6 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"event_id", "offerType"})
-})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,13 +22,10 @@ public class Price {
     @Min(1)
     private BigDecimal amount;
 
+    private String currency;
 
     @OneToOne
     @JoinColumn(name = "offer_type_id", nullable = false)
-    private OfferType offerType;
-
-    @ManyToOne
-    @JoinColumn(name = "event_id", nullable = false)
     @JsonBackReference
-    private Event event;
+    private OfferType offerType;
 }

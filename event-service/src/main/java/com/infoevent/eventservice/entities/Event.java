@@ -1,10 +1,9 @@
 package com.infoevent.eventservice.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.infoevent.eventservice.utils.EventDurationConverter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -29,20 +28,20 @@ public class Event {
     private String description;
 
     @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyy")
     private LocalDate date;
 
     @Column(nullable = false)
-    @JsonFormat(pattern="HH:mm")
-    private LocalTime time;
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime startTime;
 
     @Column(nullable = false)
-    @Convert(converter = EventDurationConverter.class)
-    private EventDuration duration;                     //
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime endTime;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private Set<Price> prices = new HashSet<>();
+    private Set<OfferType> offerTypes = new HashSet<>();
 
     @Column(nullable = false)
     private Long venueID;
@@ -57,14 +56,4 @@ public class Event {
     @Column(nullable = false)
     private int seatAvailable;
 
-
-    public void addPrice(Price price) {
-        prices.add(price);
-        price.setEvent(this);
-    }
-
-    public void removePrice(Price price) {
-        prices.remove(price);
-        price.setEvent(null);
-    }
 }

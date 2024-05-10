@@ -3,8 +3,8 @@ package com.infoevent.eventservice.controllers;
 import com.infoevent.eventservice.client.VenueRestClient;
 import com.infoevent.eventservice.entities.Event;
 import com.infoevent.eventservice.entities.EventStatus;
-import com.infoevent.eventservice.entities.Price;
 import com.infoevent.eventservice.entities.Venue;
+import com.infoevent.eventservice.schedules.EventStatusUpdater;
 import com.infoevent.eventservice.services.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * REST Controller for managing events.
@@ -31,6 +32,7 @@ public class EventController {
 
     private final EventService eventService;
     private final VenueRestClient venueRestClient;
+    private final EventStatusUpdater eventStatusUpdater;
 
     /**
      * Creates a new event.
@@ -38,11 +40,11 @@ public class EventController {
      * @param event The event to create, expected to be valid.
      * @return ResponseEntity containing the created event.
      */
-    @PostMapping
-    public ResponseEntity<?> createEvent(@Valid @RequestBody Event event) {
-        log.info("API call to create event: {}", event.getName());
+    @PostMapping("")
+    public ResponseEntity<?> createEvent(@RequestBody Event event) {
+        log.info("API call to create event: {}", "");
 
-        LocalDateTime eventDateTime = LocalDateTime.of(event.getDate(), event.getTime());
+        LocalDateTime eventDateTime = LocalDateTime.of(event.getDate(), event.getStartTime());
 
         LocalDateTime oneHourFromNow = LocalDateTime.now(ZoneId.systemDefault()).plusHours(1);
 
@@ -54,13 +56,14 @@ public class EventController {
         if (venue == null) {
             return ResponseEntity.badRequest().body("Emplacement spécifié introuvable.");
         }
+
         event.setSeatAvailable(venue.getCapacity());
 
-        Set<Price> prices = event.getPrices();
-
-        // Imposta lo stato dell'evento su ATTIVO
         event.setEventStatus(EventStatus.ACTIVE);
-        Event createdEvent = eventService.createEvent(event, prices);
+
+        Event createdEvent = eventService.createEvent(event, event.getOfferTypes());
+
+
         return ResponseEntity.ok(createdEvent);
     }
 
@@ -91,7 +94,7 @@ public class EventController {
      *
      * @return ResponseEntity containing a list of all events.
      */
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Event>> findAllEvents() {
         log.info("API call to list all events");
         List<Event> events = eventService.findAllEvents();
@@ -158,14 +161,14 @@ public class EventController {
         log.info("API call to update available seats for event with ID: {} to {}", id, seats);
 
         Optional<Event> existingEvent = eventService.findEventById(id);
-        if (!existingEvent.isPresent()) {
+        if (existingEvent.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         Event eventToUpdate = existingEvent.get();
 
         if (seats < 0) {
-            return ResponseEntity.badRequest().body("Le nombre de place acheté ne peut etre negatif.");
+            return ResponseEntity.badRequest().body("The number of seats purchased cannot be negative.");
         }
 
         eventToUpdate.setSeatAvailable(eventToUpdate.getSeatAvailable() - seats);
@@ -173,5 +176,47 @@ public class EventController {
 
         return ResponseEntity.ok(updatedEvent);
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<Event>> findAllActiveEvents() {
+        log.info("API call to fetch all active events");
+        List<Event> activeEvents = eventService.findAllActiveEvents();
+        for (Event event : activeEvents) {
+            try {
+                Venue venue = venueRestClient.getVenueById(event.getVenueID());
+                event.setVenue(venue);
+            } catch (Exception e) {
+                log.error("Failed to retrieve venue details for event ID: {}", event.getId(), e);
+            }
+        }
+        return ResponseEntity.ok(activeEvents);
+    }
+
+    @GetMapping("/validate/{id}")
+    public ResponseEntity<Boolean> validateEventStatus(@PathVariable Long id) {
+        log.info("API call to validate event status for ID: {}", id);
+        Optional<Event> eventOptional = eventService.findEventById(id);
+        if (eventOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOptional.get();
+        eventStatusUpdater.updateEventStatus(event);
+        boolean isValid = event.getEventStatus() == EventStatus.ACTIVE;
+
+        return ResponseEntity.ok(isValid);
+    }
+
+    @GetMapping("/check-availability")
+    public ResponseEntity<Boolean> checkEventAvailability(
+            @RequestParam Long venueID,
+            @RequestParam LocalTime startTime,
+            @RequestParam LocalTime endTime,
+            @RequestParam LocalDate date) {
+        log.info("Checking availability for venueId: {}, startTime: {}, endTime: {}, date: {}", venueID, startTime, endTime, date);
+        boolean isAvailable = eventService.checkEventAvailability(venueID, startTime, endTime, date);
+        return ResponseEntity.ok(isAvailable);
+    }
+
 
 }

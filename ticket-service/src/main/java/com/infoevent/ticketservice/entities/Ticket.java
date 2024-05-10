@@ -2,8 +2,11 @@ package com.infoevent.ticketservice.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -27,6 +30,17 @@ public class Ticket {
 
     @Column(nullable = false)
     private Long eventID;
+
+    @Column(nullable = false)
+    private String eventName;
+
+    @Column(nullable = false)
+    @DateTimeFormat(pattern = "dd-MM-yyy")
+    private LocalDate eventDate;
+
+    @Column(nullable = false)
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime eventStartTime;
 
     @Column(nullable = false)
     private Long paymentID;

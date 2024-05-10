@@ -4,9 +4,9 @@ import com.infoevent.gatewayservice.Services.JwtUtils;
 import com.infoevent.gatewayservice.Services.RouterValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -15,42 +15,24 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
-/**
- * Custom authentication filter for the Spring Cloud Gateway.
- * It intercepts incoming requests and performs JWT validation
- * on routes that are configured to require security.
- */
-@RefreshScope
 @Component
-@Slf4j
 @RequiredArgsConstructor
-public class AuthenticationFilter implements GatewayFilter {
-
+@Slf4j
+public class JwtTokenFilter implements GlobalFilter, Ordered {
     private final RouterValidator validator;
     private final JwtUtils jwtUtils;
 
-    /**
-     * Filters incoming HTTP requests to check for authentication on secured routes.
-     *
-     * @param exchange The current server web exchange context.
-     * @param chain The filter chain for passing the request to the next filter.
-     * @return A Mono signaling when the filtering is complete.
-     */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        boolean requiresAuth = validator.requiresAuthentication(exchange.getRequest());
+        boolean requiresAdmin = validator.requiresAdmin(exchange.getRequest());
 
-        ServerHttpRequest request = exchange.getRequest();
-
-        if (validator.isSecured().test(request)) {
-            if (authMissing(request)) {
+        if(requiresAuth || requiresAdmin){
+            if (authMissing(exchange.getRequest())) {
                 log.info("Authorization header is missing in request.");
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-
-            final String token = extractToken(request);
-
+            final String token = extractToken(exchange.getRequest());
             if (!jwtUtils.validateToken(token)) {
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
@@ -58,24 +40,15 @@ public class AuthenticationFilter implements GatewayFilter {
                 log.info("Authorization token is expired.");
                 return onError(exchange, HttpStatus.UNAUTHORIZED);
             }
-            else if (requiresAdminRole(request) && !hasAdminRole(token)) {
+            else if (requiresAdmin && !hasAdminRole(token)) {
                 log.info("Operation requires ADMIN role.");
                 return onError(exchange, HttpStatus.FORBIDDEN);
             }
-
         }
 
         // Forward the request to the next filter in the chain if authentication succeeds or isn't required
         return chain.filter(exchange);
     }
-
-    /**
-     * Handles errors by setting the response status code and completing the exchange.
-     *
-     * @param exchange The current server web exchange context.
-     * @param httpStatus The HTTP status code to return.
-     * @return A Mono signaling that the exchange has been completed.
-     */
     private Mono<Void> onError(ServerWebExchange exchange, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
@@ -126,7 +99,8 @@ public class AuthenticationFilter implements GatewayFilter {
 
         boolean isTicketAdminPath = path.matches("/ticket/by-event/\\d+") || (path.matches("/ticket") && request.getMethod() == HttpMethod.GET);
 
-        boolean isUserAdminPath = path.matches("/users/?$") || path.matches("/users/\\d+$");
+        boolean isUserAdminPath = path.matches("/users/?$") && HttpMethod.GET.equals(method) ||
+                path.matches("/users/\\d+$") && HttpMethod.DELETE.equals(method);
 
         boolean isVenueAdminPath = path.matches("/venues") && (HttpMethod.POST.equals(method) || modificationRequest);
 
@@ -143,6 +117,12 @@ public class AuthenticationFilter implements GatewayFilter {
 
      */
     private boolean hasAdminRole(String token) {
-        return jwtUtils.getClaims(token).get("roles", List.class).contains("ADMIN");
+        return jwtUtils.getClaims(token).get("role", String.class).contains("ADMIN");
+    }
+
+
+    @Override
+    public int getOrder() {
+        return -100;
     }
 }

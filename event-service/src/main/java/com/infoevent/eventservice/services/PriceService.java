@@ -50,11 +50,4 @@ public interface PriceService {
      */
     void deletePrice(Long id);
 
-    /**
-     * Finds all prices associated with a given event ID.
-     *
-     * @param eventId The ID of the event.
-     * @return A list of prices associated with the event.
-     */
-    List<Price> findPricesByEventId(Long eventId);
 }

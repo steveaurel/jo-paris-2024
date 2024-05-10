@@ -13,7 +13,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Service
-@Slf4j // Lombok annotation to enable logging
+@Slf4j
 public class JwtUtilsImpl implements JwtUtils {
 
     @Value("${jwt.secret}")
@@ -24,12 +24,12 @@ public class JwtUtilsImpl implements JwtUtils {
     @PostConstruct
     public void initKey() {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        log.info("JWT Key initialized"); // Log statement for key initialization
+        log.info("JWT Key initialized");
     }
 
     @Override
     public Claims getClaims(String token) {
-        log.info("Extracting claims from token"); // Log statement for extracting claims
+        log.info("Extracting claims from token");
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
@@ -37,10 +37,10 @@ public class JwtUtilsImpl implements JwtUtils {
     public boolean isExpired(String token) {
         try {
             boolean isExpired = getClaims(token).getExpiration().before(new Date());
-            log.info("Checking if token is expired: {}", isExpired); // Log statement for token expiration check
+            log.info("Checking if token is expired: {}", isExpired);
             return isExpired;
         } catch (Exception e) {
-            log.error("Error checking token expiration", e); // Log statement for error in checking token expiration
+            log.error("Error checking token expiration", e);
             return false;
         }
     }

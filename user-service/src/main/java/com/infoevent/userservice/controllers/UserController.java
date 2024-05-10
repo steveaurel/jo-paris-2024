@@ -4,7 +4,6 @@ import com.infoevent.userservice.Services.UserService;
 import com.infoevent.userservice.clients.KeyGeneratorRestClient;
 import com.infoevent.userservice.entities.Role;
 import com.infoevent.userservice.entities.User;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +42,7 @@ public class UserController {
      *
      * @return the ResponseEntity containing a list of all users.
      */
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers() {
         log.info("API call to fetch all users");
         List<User> users = userService.getAllUsers();
@@ -57,7 +56,7 @@ public class UserController {
      * @param user the user information to create.
      * @return the ResponseEntity containing the created user.
      */
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         log.info("API call to create a new user");
 

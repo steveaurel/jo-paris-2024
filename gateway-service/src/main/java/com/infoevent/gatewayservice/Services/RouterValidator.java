@@ -1,21 +1,31 @@
 package com.infoevent.gatewayservice.Services;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import java.util.function.Predicate;
 
 /**
- * Interface defining a strategy for validating routes in a reactive web application context.
- * It supplies a method to determine if a given {@link ServerHttpRequest} requires secured access.
+ * This interface defines a strategy for route validation within a reactive web application, focusing on security aspects.
+ * It provides mechanisms to assess whether specific {@link ServerHttpRequest}s require secured access, such as authentication or authorization.
+ * Implementations can define custom logic to evaluate request paths, headers, and other attributes to determine security requirements.
  */
 public interface RouterValidator {
 
     /**
-     * Provides a predicate that tests whether a {@link ServerHttpRequest} should be secured.
-     * This method can be implemented to specify conditions under which routes require authentication
-     * and/or authorization. For example, it might check the path, headers, or other properties of the request
-     * to determine if it matches secured routes.
+     * Determines whether a specific {@link ServerHttpRequest} requires authentication.
+     * This method can be used to identify requests that must be authenticated but not necessarily authorized
+     * for certain roles. It can inspect the request's path, headers, or other criteria to make this determination.
      *
-     * @return A {@link Predicate} that returns true if the request should be subject to security checks,
-     * and false otherwise.
+     * @param request The {@link ServerHttpRequest} to evaluate.
+     * @return {@code true} if the request requires authentication, {@code false} otherwise.
      */
-    Predicate<ServerHttpRequest> isSecured();
+    boolean requiresAuthentication(ServerHttpRequest request);
+
+    /**
+     * Evaluates whether a given {@link ServerHttpRequest} requires administrator-level access.
+     * This method is intended to identify requests that not only require authentication but also specific authorization,
+     * ensuring that only users with admin privileges can access certain routes. The evaluation can be based on the request's
+     * path, headers, session information, or other factors relevant to determining administrative access.
+     *
+     * @param request The {@link ServerHttpRequest} to assess.
+     * @return {@code true} if the request necessitates admin-level authorization, {@code false} otherwise.
+     */
+    boolean requiresAdmin(ServerHttpRequest request);
 }

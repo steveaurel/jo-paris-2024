@@ -45,10 +45,10 @@ public class EventStatusUpdater {
      *
      * @param event The event to update.
      */
-    private void updateEventStatus(Event event) {
+    public void updateEventStatus(Event event) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime eventStart = LocalDateTime.of(event.getDate(), event.getTime());
-        LocalDateTime eventEnd = eventStart.plusHours(event.getDuration().getHours()).plusMinutes(event.getDuration().getMinutes());
+        LocalDateTime eventStart = LocalDateTime.of(event.getDate(), event.getStartTime());
+        LocalDateTime eventEnd = LocalDateTime.of(event.getDate(), event.getEndTime());
 
         if (now.isBefore(eventStart.minusMinutes(30))) {
             event.setEventStatus(EventStatus.ACTIVE);

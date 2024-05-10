@@ -18,7 +18,7 @@ public class PriceController {
 
     private final PriceService priceService;
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<Price> createPrice(@Valid @RequestBody Price price) {
         log.info("API call to create price");
         Price createdPrice = priceService.createPrice(price);
@@ -33,7 +33,7 @@ public class PriceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<Price>> findAllPrices() {
         log.info("API call to list all prices");
         List<Price> prices = priceService.findAllPrices();
@@ -53,11 +53,11 @@ public class PriceController {
         priceService.deletePrice(id);
         return ResponseEntity.noContent().build();
     }
-
+    /*
     @GetMapping("/by-event/{eventId}")
     public ResponseEntity<List<Price>> findPricesByEventId(@PathVariable Long eventId) {
         log.info("API call to fetch prices for event ID: {}", eventId);
         List<Price> prices = priceService.findPricesByEventId(eventId);
         return ResponseEntity.ok(prices);
-    }
+    }*/
 }

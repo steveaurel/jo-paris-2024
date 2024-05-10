@@ -17,7 +17,7 @@ public interface UserRestClient {
     @CircuitBreaker(name = "userservice", fallbackMethod = "getDefaultUserEmail")
     User getUserByEmail(@RequestParam String email);
 
-    @PostMapping("/users/")
+    @PostMapping("/users")
     @CircuitBreaker(name = "userservice")
     User createUser(@Valid @RequestBody User user);
 

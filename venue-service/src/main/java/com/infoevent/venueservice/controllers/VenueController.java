@@ -2,7 +2,6 @@ package com.infoevent.venueservice.controllers;
 
 import com.infoevent.venueservice.entities.Venue;
 import com.infoevent.venueservice.services.VenueService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ public class VenueController {
 
     private final VenueService venueService;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Venue> createVenue(@Valid @RequestBody Venue venue) {
         log.info("API call to create venue");
         Venue createdVenue = venueService.createVenue(venue);
@@ -44,7 +43,7 @@ public class VenueController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<Venue>> findAllVenues() {
         log.info("API call to fetch all venues");
         List<Venue> venues = venueService.findAllVenues();

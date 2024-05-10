@@ -1,43 +1,9 @@
 server:
   port: 8084
-  forward-headers-strategy: framework
-
-springdoc:
-  swagger-ui:
-    path: '/swagger-ui.html'
 
 spring:
   application:
     name: notification-service
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:9999/}
 
-  cloud:
-    discovery:
-      enabled: true
-    config:
-      enabled: false
-
-  mail:
-    host: smtp.example.com
-    port: 25
-    username: example@example.com
-    password: password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
-eureka:
-  instance:
-    prefer-ip-address: true
-
-  client:
-    service-url:
-      defaultZone: ${DISCOVERY_SERVICE_URL:http://localhost:8761/eureka}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
