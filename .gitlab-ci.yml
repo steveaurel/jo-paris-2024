@@ -1,5 +1,4 @@
 stages:
-  - prepare
   - build
   - test
   - package
@@ -23,18 +22,12 @@ variables:
   AZURE_USERNAME: "$AZURE_CLIENT_ID"
   AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
 
-# Stage to prepare the environment with the necessary tools
-prepare:
-  stage: prepare
+default:
   image: debian:latest
-  script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-  artifacts:
-    paths:
-      - /usr/bin/az
 
 before_script:
+  - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
   - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
   - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
 
@@ -48,6 +41,10 @@ package-discovery-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA -f discovery-service/Dockerfile .
@@ -64,6 +61,10 @@ package-config-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA -f config-service/Dockerfile .
@@ -80,6 +81,10 @@ package-key-generator-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA -f key-generator-service/Dockerfile .
@@ -96,6 +101,10 @@ package-notification-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA -f notification-service/Dockerfile .
@@ -112,6 +121,10 @@ package-payment-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA -f payment-service/Dockerfile .
@@ -128,6 +141,10 @@ package-venue-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA -f venue-service/Dockerfile .
@@ -144,6 +161,10 @@ package-user-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA -f user-service/Dockerfile .
@@ -160,6 +181,10 @@ package-auth-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA -f auth-service/Dockerfile .
@@ -176,6 +201,10 @@ package-event-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA -f event-service/Dockerfile .
@@ -192,6 +221,10 @@ package-ticket-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA -f ticket-service/Dockerfile .
@@ -208,6 +241,10 @@ package-gateway-service:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA -f gateway-service/Dockerfile .
@@ -218,6 +255,11 @@ package-gateway-service:
 package-front-end:
   image: node:18
   stage: package
+  before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
   script:
     - cd front-end
     - npm install
@@ -330,6 +372,11 @@ test-gateway-service:
 deploy:
   image: google/cloud-sdk:latest
   stage: deploy
+  before_script:
+    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
   script:
     - kubectl config use-context $KUBE_CONTEXT
     - kubectl apply -f kubernetes/discovery-deployment.yaml
@@ -385,8 +432,11 @@ deploy:
 deploy-front-end:
   image: google/cloud-sdk:latest
   stage: deploy
+  before_script:
+    - apt-get update && apt-get install -y zip curl apt-transport-https lsb-release gnupg
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
   script:
-    - apt-get update && apt-get install -y zip
     - cd front-end/dist/front-end/browser
     - zip -r ../../front-end.zip .
     - cd ../../..
