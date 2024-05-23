@@ -237,6 +237,7 @@ test-discovery-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd discovery-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -246,6 +247,7 @@ test-config-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd config-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -255,6 +257,7 @@ test-key-generator-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd key-generator-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -264,6 +267,7 @@ test-notification-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd notification-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -273,6 +277,7 @@ test-payment-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd payment-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -282,6 +287,7 @@ test-venue-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd venue-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -291,6 +297,7 @@ test-user-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd user-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -300,6 +307,7 @@ test-auth-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd auth-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -309,6 +317,7 @@ test-event-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd event-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -318,6 +327,7 @@ test-ticket-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd ticket-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
@@ -327,6 +337,7 @@ test-gateway-service:
   image: maven:3.8.4-openjdk-17
   script:
     - cd gateway-service
+    - chmod +x mvnw
     - ./mvnw test
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
