@@ -23,6 +23,7 @@ variables:
   AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
 
 before_script:
+  - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
   - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
   - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
   - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
