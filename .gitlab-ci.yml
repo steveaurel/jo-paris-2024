@@ -1,0 +1,322 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_REGISTRY: "docker.io"
+  DOCKER_USERNAME: "steveaurel"
+  DOCKER_PASSWORD: "Aa10203040"
+  AZURE_CLIENT_ID: "7e0085b9-1609-4d6f-841b-f41048f1e143"
+  AZURE_CLIENT_SECRET: "wS68Q~.eK2MTH~8a.xMNu8MXIXwoXux_~FRVGcdd"
+  AZURE_SUBSCRIPTION_ID: "03034fa7-a51d-4498-8371-0f4cdfed0f99"
+  AZURE_TENANT_ID: "b790ea45-5098-436f-a661-1ad6515b6157"
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  KUBE_CONTEXT: "aks-cluster-context"
+  KUBE_NAMESPACE: "default"
+  KUBECONFIG: /etc/deploy/kubeconfig
+  AZURE_APP_NAME: "joparis"
+  AZURE_USERNAME: "$AZURE_CLIENT_ID"
+  AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
+
+before_script:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+  - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+  - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
+
+build-discovery-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd discovery-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-config-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd config-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-key-generator-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd key-generator-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-notification-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd notification-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-payment-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd payment-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-venue-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd venue-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-user-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd user-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-auth-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd auth-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-event-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd event-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-ticket-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd ticket-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-gateway-service:
+  image: maven:3.8.4-openjdk-17
+  stage: build
+  script:
+    - cd gateway-service
+    - mvn package -DskipTests
+    - docker build -t $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+build-front-end:
+  stage: build
+  script:
+    - cd front-end
+    - docker build -t $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-discovery-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd discovery-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-config-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd config-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-key-generator-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd key-generator-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-notification-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd notification-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-payment-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd payment-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-venue-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd venue-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-user-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd user-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-auth-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd auth-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-event-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd event-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-ticket-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd ticket-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+test-gateway-service:
+  image: maven:3.8.4-openjdk-17
+  stage: test
+  script:
+    - cd gateway-service
+    - ./mvnw test
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl config use-context $KUBE_CONTEXT
+    - kubectl apply -f kubernetes/discovery-deployment.yaml
+    - kubectl apply -f kubernetes/discovery-service.yaml
+    - kubectl set image deployment/discovery-service discovery-service=$CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/config-deployment.yaml
+    - kubectl apply -f kubernetes/config-service.yaml
+    - kubectl set image deployment/config-service config-service=$CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/key-generator-deployment.yaml
+    - kubectl apply -f kubernetes/key-generator-service.yaml
+    - kubectl set image deployment/key-generator-service key-generator-service=$CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/notification-deployment.yaml
+    - kubectl apply -f kubernetes/notification-service.yaml
+    - kubectl set image deployment/notification-service notification-service=$CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/payment-deployment.yaml
+    - kubectl apply -f kubernetes/payment-service.yaml
+    - kubectl set image deployment/payment-service payment-service=$CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/venue-deployment.yaml
+    - kubectl apply -f kubernetes/venue-service.yaml
+    - kubectl set image deployment/venue-service venue-service=$CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/user-deployment.yaml
+    - kubectl apply -f kubernetes/user-service.yaml
+    - kubectl set image deployment/user-service user-service=$CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/auth-deployment.yaml
+    - kubectl apply -f kubernetes/auth-service.yaml
+    - kubectl set image deployment/auth-service auth-service=$CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/event-deployment.yaml
+    - kubectl apply -f kubernetes/event-service.yaml
+    - kubectl set image deployment/event-service event-service=$CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/ticket-deployment.yaml
+    - kubectl apply -f kubernetes/ticket-service.yaml
+    - kubectl set image deployment/ticket-service ticket-service=$CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/gateway-deployment.yaml
+    - kubectl apply -f kubernetes/gateway-service.yaml
+    - kubectl set image deployment/gateway-service gateway-service=$CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
+
+    - kubectl apply -f kubernetes/front-end-deployment.yaml
+    - kubectl apply -f kubernetes/front-end-service.yaml
+    - kubectl set image deployment/front-end front-end=$CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
+
+deploy-front-end:
+  stage: deploy
+  script:
+    - apt-get update && apt-get install -y zip
+    - cd front-end/dist/front-end/browser
+    - zip -r ../../front-end.zip .
+    - cd ../../..
+    - curl -X POST -u $AZURE_USERNAME:$AZURE_PASSWORD --data-binary @front-end.zip https://$AZURE_APP_NAME.scm.azurewebsites.net/api/zipdeploy
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
