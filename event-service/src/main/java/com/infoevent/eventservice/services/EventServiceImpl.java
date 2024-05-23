@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,10 +70,16 @@ public class EventServiceImpl implements EventService {
             existingEvent.setEndTime(updatedEvent.getEndTime());
             existingEvent.setEventStatus(updatedEvent.getEventStatus());
             existingEvent.setVenueID(updatedEvent.getVenueID());
-            existingEvent.getOfferTypes().clear();
+
             if (updatedEvent.getOfferTypes() != null) {
+                if (existingEvent.getOfferTypes() == null) {
+                    existingEvent.setOfferTypes(new HashSet<>());
+                } else {
+                    existingEvent.getOfferTypes().clear();
+                }
                 existingEvent.getOfferTypes().addAll(updatedEvent.getOfferTypes());
             }
+
             return eventRepository.save(existingEvent);
         }).orElseThrow(() -> new IllegalStateException("Event not found with ID: " + id));
     }

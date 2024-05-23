@@ -1,0 +1,18 @@
+
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="left-section">
+    <a [routerLink]="'/event'" class="logo-link">
+      <img src="./assets/images/logo_jo_Paris_2024.svg" alt="Logo" class="logo" height="198" width="174">
+      <span class="app-title">J.O. PARIS 2024</span>
+    </a>
+
+  </div>
+  <div class="right-section">
+    <button *ngIf="!currentUser?.id" mat-button [routerLink]="'/login'">Login</button>
+    <button *ngIf="!currentUser?.id" mat-button [routerLink]="'/register'">Register</button>
+
+    <button *ngIf="currentUser?.id && isAdmin()" mat-button [routerLink]="'/dashboard'">DASHBOARD</button>
+    <button *ngIf="currentUser?.id" mat-button [routerLink]="'/profile'">{{ currentUser.firstName + ' ' + currentUser.lastName}}</button>
+    <button *ngIf="currentUser?.id" mat-button (click)="logout()">Logout</button>
+  </div>
+</mat-toolbar>

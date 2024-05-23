@@ -1,0 +1,28 @@
+button[mat-button][color="primary"] {
+  background-color: green;
+  color: white;
+}
+
+button[mat-button]::before {
+  content: "←";
+  color: white;
+  margin-right: 5px;
+}
+.right-align {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.button-container {
+  flex: 0 0 auto;
+  text-align: right;
+}
+.invisible {
+  visibility: hidden;
+}

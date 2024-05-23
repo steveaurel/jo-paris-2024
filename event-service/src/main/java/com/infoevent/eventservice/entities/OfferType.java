@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class OfferType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +28,13 @@ public class OfferType {
     @ManyToOne
     @JoinColumn(name = "event_id")
     @JsonBackReference
+    @ToString.Exclude
     private Event event;
 
     @OneToOne(mappedBy = "offerType", cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     @JsonManagedReference
+    @ToString.Exclude
     private Price price;
 
 }

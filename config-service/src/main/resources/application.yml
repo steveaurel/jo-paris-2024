@@ -8,8 +8,15 @@ spring:
     config:
       server:
         git:
-          uri: http://gitlab.com/steveaurel/config-repo
+          uri: https://gitlab.com/steveaurel/config-repo
           default-label: master
           clone-on-start: true
+          username: steveaurel
+          password: glpat-uhPyBzHYtVgiu4-6VLG3
+          skip-ssl-validation: true
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -1,0 +1,84 @@
+<!-- venue-management.component.html -->
+<div class="venue-management-container">
+  <mat-form-field appearance="fill">
+    <mat-label>Search venues</mat-label>
+    <input matInput (input)="filterVenues($event)">
+  </mat-form-field>
+  <mat-table [dataSource]="filteredVenues" class="mat-elevation-z8">
+
+    <!-- Column definitions for Venue details -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <input matInput [(ngModel)]="venue.name">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <input matInput [(ngModel)]="venue.location.address">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <mat-header-cell *matHeaderCellDef> City </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <input matInput [(ngModel)]="venue.location.city">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef> Country </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <input matInput [(ngModel)]="venue.location.country">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="capacity">
+      <mat-header-cell *matHeaderCellDef> Capacity </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <input matInput type="number" [(ngModel)]="venue.capacity">
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let venue">
+        <button mat-button color="primary" (click)="updateVenue(venue)">Update</button>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Row definitions -->
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+  </mat-table>
+
+  <mat-card class="add-venue-form">
+    <form (submit)="addVenue()">
+      <h3>Add New Venue</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="newVenue.name" name="name" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input *ngIf="newVenue.location" matInput [(ngModel)]="newVenue.location.address" name="address" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>City</mat-label>
+        <input *ngIf="newVenue.location" matInput [(ngModel)]="newVenue.location.city" name="city" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Country</mat-label>
+        <input *ngIf="newVenue.location" matInput [(ngModel)]="newVenue.location.country" name="country" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" [(ngModel)]="newVenue.capacity" name="capacity" required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Add Venue</button>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,12 @@
+/* Assuming you have an app.component.css - if not, adjust the main CSS file. */
+router-outlet + app-footer {
+  margin-top: 20px; /* Adds spacing between content and footer */
+}
+
+/* Adjustments to the main content container within app.component.css */
+.content { /* You might need to wrap your <router-outlet> in a div with class .content */
+  padding-top: 64px; /* Height of the header if it's fixed */
+  padding-bottom: 500px; /* Height of the footer if it's fixed */
+  overflow: auto; /* Ensures content can scroll within the padded area */
+}
+

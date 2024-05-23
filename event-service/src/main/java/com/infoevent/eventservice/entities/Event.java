@@ -3,6 +3,7 @@ package com.infoevent.eventservice.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = "venue")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class Event {
     private String description;
 
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "dd-MM-yyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
 
     @Column(nullable = false)

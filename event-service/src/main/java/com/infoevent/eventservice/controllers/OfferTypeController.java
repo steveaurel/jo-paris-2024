@@ -5,6 +5,7 @@ import com.infoevent.eventservice.services.OfferTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,9 +63,13 @@ public class OfferTypeController {
      * @return ResponseEntity containing the updated offer type.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<OfferType> updateOfferType(@PathVariable Long id, @Valid @RequestBody OfferType offerType) {
-        OfferType updatedOfferType = offerTypeService.updateOfferType(id, offerType);
-        return ResponseEntity.ok(updatedOfferType);
+    public ResponseEntity<?> updateOfferType(@PathVariable Long id, @Valid @RequestBody OfferType offerType) {
+        try {
+            OfferType updatedOfferType = offerTypeService.updateOfferType(id, offerType);
+            return ResponseEntity.ok(updatedOfferType);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     /**

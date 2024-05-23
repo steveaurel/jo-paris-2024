@@ -1,0 +1,41 @@
+/* venue-management.component.css */
+.event-management-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling on smaller screens */
+}
+
+.mat-cell, .mat-header-cell {
+  padding: 8px;
+}
+
+input[matInput] {
+  width: 100%; /* Ensures input fields use the full width of the cell */
+  border: none; /* Removes default input border */
+  outline: none; /* Removes focus outline to integrate seamlessly with the table */
+}
+
+button[mat-button] {
+  margin-left: auto; /* Positions button to the right of the cell */
+}
+
+.add-event-form {
+  margin: 20px;
+  padding: 20px;
+}
+
+.mat-form-field {
+  width: 100%; /* Full width of the form fields */
+  margin-bottom: 16px; /* Space between form fields */
+}
+
+button[mat-raised-button] {
+  margin-top: 20px; /* Space above the button */
+}

@@ -1,0 +1,42 @@
+<mat-tab-group [(selectedIndex)]="selectedIndex" animationDuration="0ms">
+  <mat-tab label="Profile">
+    <div class="profile-info">
+      <form>
+        <mat-form-field appearance="fill">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="First Name" [(ngModel)]="user.firstName" name="firstName">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Last Name" [(ngModel)]="user.lastName" name="lastName">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" [(ngModel)]="user.email" name="email">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Role</mat-label>
+          <input matInput placeholder="First Name" [(ngModel)]="user.role" name="role">
+        </mat-form-field>
+        <!-- Additional form fields as needed -->
+        <button mat-raised-button color="primary" (click)="updateProfile()">Update Profile</button>
+      </form>
+    </div>
+  </mat-tab>
+  <mat-tab label="Tickets">
+    <div class="tickets-list">
+      <mat-list>
+        <mat-list-item *ngFor="let ticket of ticketList">
+          <div class="ticket-details">
+            <h3>{{ ticket.eventName }}</h3>
+            <p>Event Date: {{ ticket.eventDate }} at {{ticket.eventStartTime}}</p>
+          </div>
+          <button mat-icon-button (click)="downloadTicket(ticket)">
+            <mat-icon>download</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+

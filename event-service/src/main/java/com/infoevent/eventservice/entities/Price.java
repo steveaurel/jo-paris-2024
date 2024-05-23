@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class Price {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +28,6 @@ public class Price {
     @OneToOne
     @JoinColumn(name = "offer_type_id", nullable = false)
     @JsonBackReference
+    @ToString.Exclude
     private OfferType offerType;
 }

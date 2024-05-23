@@ -160,16 +160,16 @@ public class EventController {
     public ResponseEntity<?> updateEventSeats(@PathVariable Long id, @RequestParam int seats) {
         log.info("API call to update available seats for event with ID: {} to {}", id, seats);
 
+        if (seats < 0) {
+            return ResponseEntity.badRequest().body("The number of seats purchased cannot be negative.");
+        }
+
         Optional<Event> existingEvent = eventService.findEventById(id);
         if (existingEvent.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
         Event eventToUpdate = existingEvent.get();
-
-        if (seats < 0) {
-            return ResponseEntity.badRequest().body("The number of seats purchased cannot be negative.");
-        }
 
         eventToUpdate.setSeatAvailable(eventToUpdate.getSeatAvailable() - seats);
         Event updatedEvent = eventService.updateEvent(id, eventToUpdate);

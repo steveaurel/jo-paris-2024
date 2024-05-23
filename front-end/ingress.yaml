@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jo-paris-2024-ingress
+  namespace: jo-paris-2024
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: stevesielinou.com  # Remplacez par votre domaine personnalisé
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: front-end  # Le nom de votre service frontend
+            port:
+              number: 4200   # Le port de votre service frontend
+  tls:
+  - hosts:
+    - stevesielinou.com  # Remplacez par votre domaine personnalisé
+    secretName: your-app-tls  # Nom du secret pour le certificat

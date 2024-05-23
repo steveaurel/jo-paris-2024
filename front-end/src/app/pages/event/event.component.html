@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <mat-grid-list [cols]="cols" rowHeight="350px" gutterSize="10px" *ngIf="activeEvents.length > 0">
+    <mat-grid-tile *ngFor="let event of activeEvents">
+      <mat-card class="event-card">
+        <mat-card-header color="primary">
+          <mat-card-title>{{ event.name }}</mat-card-title>
+          <mat-card-subtitle>{{ event.venue?.name }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Description: {{ event.description }}</p>
+          <p>Start Date: {{ event.date }} at {{ event.startTime }}</p>
+          <p>End Date: {{ event.date }} at {{ event.endTime }}</p>
+          <p>Available seats: {{ event.seatAvailable }}</p>
+          <p>
+            Address: {{ event.venue?.location?.address }},
+            {{ event.venue?.location?.city }},
+            {{ event.venue?.location?.country }}
+          </p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-button color="primary" (click)="navigateToEventDetails(event.id)">
+            More Details
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <div *ngIf="activeEvents.length === 0">
+    <p>No active events found.</p>
+  </div>
+</div>
