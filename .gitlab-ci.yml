@@ -1,4 +1,5 @@
 stages:
+  - prepare
   - build
   - test
   - package
@@ -22,29 +23,31 @@ variables:
   AZURE_USERNAME: "$AZURE_CLIENT_ID"
   AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
 
-default:
+# Stage de préparation pour installer Azure CLI et kubectl
+prepare:
+  stage: prepare
   image: debian:latest
-
-before_script:
-  - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-  - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-  - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-  - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
-
-# Jobs for building and packaging with Docker
-package-discovery-service:
-  image: docker:latest
-  services:
-    - docker:dind
-  stage: package
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_TLS_CERTDIR: ""
-  before_script:
+  script:
     - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
+  artifacts:
+    paths:
+      - /usr/bin/az
+      - /usr/bin/kubectl
+      - ~/.kube
+
+# Jobs pour builder et packager avec Docker
+package-discovery-service:
+  stage: package
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA -f discovery-service/Dockerfile .
@@ -53,18 +56,14 @@ package-discovery-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-config-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA -f config-service/Dockerfile .
@@ -73,18 +72,14 @@ package-config-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-key-generator-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA -f key-generator-service/Dockerfile .
@@ -93,18 +88,14 @@ package-key-generator-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-notification-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA -f notification-service/Dockerfile .
@@ -113,18 +104,14 @@ package-notification-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-payment-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA -f payment-service/Dockerfile .
@@ -133,18 +120,14 @@ package-payment-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-venue-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA -f venue-service/Dockerfile .
@@ -153,18 +136,14 @@ package-venue-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-user-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA -f user-service/Dockerfile .
@@ -173,18 +152,14 @@ package-user-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-auth-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA -f auth-service/Dockerfile .
@@ -193,18 +168,14 @@ package-auth-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-event-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA -f event-service/Dockerfile .
@@ -213,18 +184,14 @@ package-event-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-ticket-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA -f ticket-service/Dockerfile .
@@ -233,18 +200,14 @@ package-ticket-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-gateway-service:
+  stage: package
   image: docker:latest
   services:
     - docker:dind
-  stage: package
   variables:
     DOCKER_HOST: tcp://docker:2375/
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - docker build -t $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA -f gateway-service/Dockerfile .
@@ -253,14 +216,13 @@ package-gateway-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 package-front-end:
-  image: node:18
   stage: package
-  before_script:
+  image: node:18
+  script:
     - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
-  script:
     - cd front-end
     - npm install
     - npm run build:prod
@@ -269,10 +231,10 @@ package-front-end:
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
-# Jobs for testing with Maven
+# Jobs pour tester avec Maven
 test-discovery-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd discovery-service
     - ./mvnw test
@@ -280,8 +242,8 @@ test-discovery-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-config-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd config-service
     - ./mvnw test
@@ -289,8 +251,8 @@ test-config-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-key-generator-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd key-generator-service
     - ./mvnw test
@@ -298,8 +260,8 @@ test-key-generator-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-notification-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd notification-service
     - ./mvnw test
@@ -307,8 +269,8 @@ test-notification-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-payment-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd payment-service
     - ./mvnw test
@@ -316,8 +278,8 @@ test-payment-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-venue-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd venue-service
     - ./mvnw test
@@ -325,8 +287,8 @@ test-venue-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-user-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd user-service
     - ./mvnw test
@@ -334,8 +296,8 @@ test-user-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-auth-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd auth-service
     - ./mvnw test
@@ -343,8 +305,8 @@ test-auth-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-event-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd event-service
     - ./mvnw test
@@ -352,8 +314,8 @@ test-event-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-ticket-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd ticket-service
     - ./mvnw test
@@ -361,8 +323,8 @@ test-ticket-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 test-gateway-service:
-  image: maven:3.8.4-openjdk-17
   stage: test
+  image: maven:3.8.4-openjdk-17
   script:
     - cd gateway-service
     - ./mvnw test
@@ -370,14 +332,13 @@ test-gateway-service:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 deploy:
-  image: google/cloud-sdk:latest
   stage: deploy
-  before_script:
+  image: google/cloud-sdk:latest
+  script:
     - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
-  script:
     - kubectl config use-context $KUBE_CONTEXT
     - kubectl apply -f kubernetes/discovery-deployment.yaml
     - kubectl apply -f kubernetes/discovery-service.yaml
@@ -430,13 +391,12 @@ deploy:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 deploy-front-end:
-  image: google/cloud-sdk:latest
   stage: deploy
-  before_script:
+  image: google/cloud-sdk:latest
+  script:
     - apt-get update && apt-get install -y zip curl apt-transport-https lsb-release gnupg
     - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-  script:
     - cd front-end/dist/front-end/browser
     - zip -r ../../front-end.zip .
     - cd ../../..
