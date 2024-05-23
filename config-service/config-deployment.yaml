@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: config-service
+  template:
+    metadata:
+      labels:
+        app: config-service
+    spec:
+      containers:
+        - name: config-service
+          image: steveaurel_config_service:latest
+          ports:
+            - containerPort: 9999
+          env:
+            - name: GITLAB_USERNAME
+              value: "steveaurel"
+            - name: GITLAB_PASSWORD
+              value: "glpat-uhPyBzHYtVgiu4-6VLG3"
+            - name: GITLAB_URI
+              value: "https://gitlab.com/steveaurel/config-repo"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9999
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9999
+            initialDelaySeconds: 10
+            periodSeconds: 30

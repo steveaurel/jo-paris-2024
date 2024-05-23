@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: key-generator-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: key-generator-service
+  template:
+    metadata:
+      labels:
+        app: key-generator-service
+    spec:
+      containers:
+        - name: key-generator-service
+          image: steveaurel_key_generator_service:latest
+          ports:
+            - containerPort: 8089
+          env:
+            - name: DISCOVERY_SERVICE_URL
+              value: "http://discovery-service:8761/eureka"
+            - name: CONFIG_SERVER_URL
+              value: "http://config-service:9999"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "curl -sf http://config-service:9999/actuator/health && curl -sf http://discovery-service:8761/actuator/health"
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8089
+            initialDelaySeconds: 10
+            periodSeconds: 30
