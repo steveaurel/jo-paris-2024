@@ -238,7 +238,7 @@ test-discovery-service:
   script:
     - cd discovery-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -248,7 +248,7 @@ test-config-service:
   script:
     - cd config-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -258,7 +258,7 @@ test-key-generator-service:
   script:
     - cd key-generator-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -268,7 +268,7 @@ test-notification-service:
   script:
     - cd notification-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -278,7 +278,7 @@ test-payment-service:
   script:
     - cd payment-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -288,7 +288,7 @@ test-venue-service:
   script:
     - cd venue-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -298,7 +298,7 @@ test-user-service:
   script:
     - cd user-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -308,7 +308,7 @@ test-auth-service:
   script:
     - cd auth-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -318,7 +318,7 @@ test-event-service:
   script:
     - cd event-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -328,7 +328,7 @@ test-ticket-service:
   script:
     - cd ticket-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -338,7 +338,7 @@ test-gateway-service:
   script:
     - cd gateway-service
     - chmod +x mvnw
-    - ./mvnw test
+    - ./mvnw test -X
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
