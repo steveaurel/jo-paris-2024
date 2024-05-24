@@ -362,7 +362,7 @@ test-gateway-service:
 
 deploy:
   stage: deploy
-  image: mcr.microsoft.com/azure-cli
+  image: google/cloud-sdk:latest
   services:
     - docker:dind
   variables:
