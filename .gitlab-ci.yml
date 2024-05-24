@@ -16,7 +16,7 @@ variables:
   AZURE_SUBSCRIPTION_ID: "03034fa7-a51d-4498-8371-0f4cdfed0f99"
   AZURE_TENANT_ID: "b790ea45-5098-436f-a661-1ad6515b6157"
   IMAGE_TAG: $DOCKER_USERNAME/jo-paris-2024:$CI_COMMIT_REF_SLUG
-  KUBE_CONTEXT: "aks-cluster-context"
+  KUBE_CONTEXT: "jo-paris-2024-aks"
   KUBE_NAMESPACE: "default"
   KUBECONFIG: /etc/deploy/kubeconfig
   AZURE_APP_NAME: "joparis"
