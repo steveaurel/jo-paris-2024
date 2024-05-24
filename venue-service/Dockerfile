@@ -7,10 +7,6 @@ WORKDIR /app
 # Copy the project files into the container
 COPY . .
 
-# Add CA certificates to avoid SSL certificate errors
-RUN apt-get update && apt-get install -y ca-certificates
-RUN update-ca-certificates
-
 # Run the Maven build
 RUN mvn package -DskipTests
 

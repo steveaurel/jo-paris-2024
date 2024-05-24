@@ -38,6 +38,18 @@ prepare:
       - /usr/bin/kubectl
       - ~/.kube
 
+# Job pour construire l'application front-end
+build-front-end:
+  stage: build
+  image: node:18
+  script:
+    - cd front-end
+    - npm install
+    - npm run build:prod
+  artifacts:
+    paths:
+      - front-end/dist/front-end
+
 # Jobs pour builder et packager avec Docker
 package-discovery-service:
   stage: package
@@ -217,17 +229,20 @@ package-gateway-service:
 
 package-front-end:
   stage: package
-  image: node:18
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-    - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - cd front-end
-    - npm install
-    - npm run build:prod
     - docker build -t $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA -f Dockerfile .
     - docker push $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
+  dependencies:
+    - build-front-end
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
