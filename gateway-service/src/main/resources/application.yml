@@ -1,6 +1,10 @@
 server:
   port: 8888
 
+jwt:
+  secret: MiAVzqUXy5Tfr1kVIGpPMiAVzqUXy5Tfr1kVIGpP
+  expiration: 86400
+
 spring:
   application:
     name: gateway-service
