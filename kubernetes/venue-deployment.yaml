@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: venue-service
-          image: steveaurel/venue-service:latest
+          image: docker.io/steveaurel/venue-service:latest
           ports:
             - containerPort: 8087
           env:

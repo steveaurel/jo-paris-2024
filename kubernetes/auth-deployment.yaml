@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: steveaurel/auth-service:latest
+          image: docker.io/steveaurel/auth-service:latest
           ports:
             - containerPort: 8082
           env:

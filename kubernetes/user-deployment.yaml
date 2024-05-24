@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: steveaurel/user-service:latest
+          image: docker.io/steveaurel/user-service:latest
           ports:
             - containerPort: 8081
           env:

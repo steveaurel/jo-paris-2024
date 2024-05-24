@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: steveaurel/notification-service:latest
+          image: docker.io/steveaurel/notification-service:latest
           ports:
             - containerPort: 8084
           env:

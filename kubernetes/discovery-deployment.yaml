@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: discovery-service
-          image: steveaurel/discovery-service:latest
+          image: docker.io/steveaurel/discovery-service:latest
           ports:
             - containerPort: 8761
           readinessProbe:
