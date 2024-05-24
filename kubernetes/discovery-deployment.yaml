@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: front-end
+  name: discovery-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: front-end
+      app: discovery-service
   template:
     metadata:
       labels:
-        app: front-end
+        app: discovery-service
     spec:
       containers:
-        - name: front-end
-          image: steveaurel_front_end:latest
+        - name: discovery-service
+          image: steveaurel/discovery-service:latest
           ports:
-            - containerPort: 4200
+            - containerPort: 8761
           readinessProbe:
             httpGet:
-              path: /
-              port: 4200
+              path: /actuator/health
+              port: 8761
             initialDelaySeconds: 10
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /
-              port: 4200
+              path: /actuator/health
+              port: 8761
             initialDelaySeconds: 10
             periodSeconds: 30

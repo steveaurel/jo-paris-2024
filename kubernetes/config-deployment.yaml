@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: config-service
-          image: steveaurel_config_service:latest
+          image: steveaurel/config-service:latest
           ports:
             - containerPort: 9999
           env:

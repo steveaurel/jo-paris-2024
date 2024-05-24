@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-service
+  name: venue-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: payment-service
+      app: venue-service
   template:
     metadata:
       labels:
-        app: payment-service
+        app: venue-service
     spec:
       containers:
-        - name: payment-service
-          image: steveaurel_payment_service:latest
+        - name: venue-service
+          image: steveaurel/venue-service:latest
           ports:
-            - containerPort: 8085
+            - containerPort: 8087
           env:
             - name: DISCOVERY_SERVICE_URL
               value: "http://discovery-service:8761/eureka"
@@ -33,6 +33,6 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health
-              port: 8085
+              port: 8087
             initialDelaySeconds: 10
             periodSeconds: 30
