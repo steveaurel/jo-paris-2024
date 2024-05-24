@@ -22,7 +22,7 @@ variables:
   AZURE_APP_NAME: "joparis"
   AZURE_USERNAME: "$AZURE_CLIENT_ID"
   AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
-  REGISTRY_IMAGE: $DOCKER_REGISTRY/$DOCKER_USERNAME/jo-paris-2024
+  REGISTRY_IMAGE: $DOCKER_USERNAME/jo-paris-2024
 
 # Stage de préparation pour installer Azure CLI et kubectl
 prepare:
@@ -50,6 +50,8 @@ build-front-end:
   artifacts:
     paths:
       - front-end/dist/front-end
+  rules:
+    - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
 # Jobs pour builder et packager avec Docker
 package-discovery-service:
