@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "postinstall": "npm install esbuild",
+    "build:prod": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && ng build",
     "build:dev": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && ng build"
   },
   "private": true,
