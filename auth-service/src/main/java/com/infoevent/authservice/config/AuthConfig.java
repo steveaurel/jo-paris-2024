@@ -49,6 +49,7 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.info("Configuring HttpSecurity.");
+
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/auth/sign-up", "/auth/sign-in", "/auth/validate").permitAll()
