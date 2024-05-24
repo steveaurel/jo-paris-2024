@@ -22,6 +22,7 @@ variables:
   AZURE_APP_NAME: "joparis"
   AZURE_USERNAME: "$AZURE_CLIENT_ID"
   AZURE_PASSWORD: "$AZURE_CLIENT_SECRET"
+  REGISTRY_IMAGE: $DOCKER_REGISTRY/$DOCKER_USERNAME/jo-paris-2024
 
 # Stage de préparation pour installer Azure CLI et kubectl
 prepare:
@@ -62,8 +63,8 @@ package-discovery-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA -f discovery-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA -f discovery-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -78,8 +79,8 @@ package-config-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA -f config-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA -f config-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -94,8 +95,8 @@ package-key-generator-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA -f key-generator-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA -f key-generator-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -110,8 +111,8 @@ package-notification-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA -f notification-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA -f notification-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -126,8 +127,8 @@ package-payment-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA -f payment-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA -f payment-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -142,8 +143,8 @@ package-venue-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA -f venue-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA -f venue-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -158,8 +159,8 @@ package-user-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA -f user-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA -f user-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -174,8 +175,8 @@ package-auth-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA -f auth-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA -f auth-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -190,8 +191,8 @@ package-event-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA -f event-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA -f event-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -206,8 +207,8 @@ package-ticket-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA -f ticket-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA -f ticket-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -222,8 +223,8 @@ package-gateway-service:
   before_script:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA -f gateway-service/Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA -f gateway-service/Dockerfile .
+    - docker push $REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
@@ -239,8 +240,8 @@ package-front-end:
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
   script:
     - cd front-end
-    - docker build -t $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA -f Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
+    - docker build -t $REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA -f Dockerfile .
+    - docker push $REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
   dependencies:
     - build-front-end
   rules:
@@ -368,51 +369,51 @@ deploy:
     - kubectl config use-context $KUBE_CONTEXT
     - kubectl apply -f kubernetes/discovery-deployment.yaml
     - kubectl apply -f kubernetes/discovery-service.yaml
-    - kubectl set image deployment/discovery-service discovery-service=$CI_REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/discovery-service discovery-service=$REGISTRY_IMAGE/discovery-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/config-deployment.yaml
     - kubectl apply -f kubernetes/config-service.yaml
-    - kubectl set image deployment/config-service config-service=$CI_REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/config-service config-service=$REGISTRY_IMAGE/config-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/key-generator-deployment.yaml
     - kubectl apply -f kubernetes/key-generator-service.yaml
-    - kubectl set image deployment/key-generator-service key-generator-service=$CI_REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/key-generator-service key-generator-service=$REGISTRY_IMAGE/key-generator-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/notification-deployment.yaml
     - kubectl apply -f kubernetes/notification-service.yaml
-    - kubectl set image deployment/notification-service notification-service=$CI_REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/notification-service notification-service=$REGISTRY_IMAGE/notification-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/payment-deployment.yaml
     - kubectl apply -f kubernetes/payment-service.yaml
-    - kubectl set image deployment/payment-service payment-service=$CI_REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/payment-service payment-service=$REGISTRY_IMAGE/payment-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/venue-deployment.yaml
     - kubectl apply -f kubernetes/venue-service.yaml
-    - kubectl set image deployment/venue-service venue-service=$CI_REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/venue-service venue-service=$REGISTRY_IMAGE/venue-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/user-deployment.yaml
     - kubectl apply -f kubernetes/user-service.yaml
-    - kubectl set image deployment/user-service user-service=$CI_REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/user-service user-service=$REGISTRY_IMAGE/user-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/auth-deployment.yaml
     - kubectl apply -f kubernetes/auth-service.yaml
-    - kubectl set image deployment/auth-service auth-service=$CI_REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/auth-service auth-service=$REGISTRY_IMAGE/auth-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/event-deployment.yaml
     - kubectl apply -f kubernetes/event-service.yaml
-    - kubectl set image deployment/event-service event-service=$CI_REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/event-service event-service=$REGISTRY_IMAGE/event-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/ticket-deployment.yaml
     - kubectl apply -f kubernetes/ticket-service.yaml
-    - kubectl set image deployment/ticket-service ticket-service=$CI_REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/ticket-service ticket-service=$REGISTRY_IMAGE/ticket-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/gateway-deployment.yaml
     - kubectl apply -f kubernetes/gateway-service.yaml
-    - kubectl set image deployment/gateway-service gateway-service=$CI_REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
+    - kubectl set image deployment/gateway-service gateway-service=$REGISTRY_IMAGE/gateway-service:$CI_COMMIT_SHA
 
     - kubectl apply -f kubernetes/front-end-deployment.yaml
     - kubectl apply -f kubernetes/front-end-service.yaml
-    - kubectl set image deployment/front-end front-end=$CI_REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
+    - kubectl set image deployment/front-end front-end=$REGISTRY_IMAGE/front-end:$CI_COMMIT_SHA
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
 
