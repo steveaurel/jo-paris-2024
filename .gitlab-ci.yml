@@ -362,18 +362,24 @@ test-gateway-service:
 
 deploy:
   stage: deploy
-  image: google/cloud-sdk:latest
-  script:
+  image: mcr.microsoft.com/azure-cli
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
     - apt-get update && apt-get install -y curl apt-transport-https lsb-release gnupg
     - curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
     - echo "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
     - apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
     - service docker start
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - kubectl config use-context $KUBE_CONTEXT
     - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" "$DOCKER_REGISTRY"
+    - kubectl create secret docker-registry dockerhub-secret --docker-username=$DOCKER_USERNAME --docker-password=$DOCKER_PASSWORD --docker-email=steveaurel@gmail.com --namespace=default
+  script:
     - kubectl create secret docker-registry dockerhub-secret --docker-username=steveaurel --docker-password=Aa10203040 --docker-email=steveaurel@gmail.com --namespace=default
     - kubectl apply -f kubernetes/discovery-deployment.yaml
     - kubectl apply -f kubernetes/discovery-service.yaml
