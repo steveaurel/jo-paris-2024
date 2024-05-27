@@ -362,7 +362,7 @@ test-gateway-service:
 
 deploy:
   stage: deploy
-  image: google/cloud-sdk:latest
+  image: steveaurel/deploy-image:latest
   services:
     - docker:dind
   variables:
