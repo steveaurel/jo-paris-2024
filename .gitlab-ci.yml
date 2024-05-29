@@ -369,7 +369,6 @@ deploy:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials --resource-group jo-paris-2024-rg --name jo-paris-2024-aks --file ~/.kube/config --overwrite-existing
     - kubectl config use-context $KUBE_CONTEXT
-    - kubectl create secret docker-registry dockerhub-secret --docker-username=steveaurel --docker-password=Aa10203040 --docker-email=steveaurel@gmail.com --namespace=default
     - kubectl apply -f kubernetes/discovery-deployment.yaml
     - kubectl apply -f kubernetes/discovery-service.yaml
     - kubectl set image deployment/discovery-service discovery-service=$REGISTRY_IMAGE/discovery-service:1.0.0
