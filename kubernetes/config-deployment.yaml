@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: config-service
-          image: docker.io/steveaurel/config-service:latest
+          image: docker.io/steveaurel/config-service:1.0.0
           ports:
             - containerPort: 9999
           env:

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: front-end
-          image: docker.io/steveaurel/front-end:latest
+          image: docker.io/steveaurel/front-end:1.0.0
           ports:
             - containerPort: 4200
           readinessProbe:

@@ -11,6 +11,8 @@ COPY ./ /usr/local/app
 RUN apt-get update && apt-get install -y ca-certificates
 # Ensure the certificates are recognized by Node.js
 RUN npm config set cafile /etc/ssl/certs/ca-certificates.crt
+RUN npm config set strict-ssl false
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 
 # Install project dependencies
 RUN npm install

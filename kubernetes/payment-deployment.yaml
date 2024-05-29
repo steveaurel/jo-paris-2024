@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: docker.io/steveaurel/payment-service:latest
+          image: docker.io/steveaurel/payment-service:1.0.0
           ports:
             - containerPort: 8085
           env:

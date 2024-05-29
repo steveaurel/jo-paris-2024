@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: event-service
-          image: docker.io/steveaurel/event-service:latest
+          image: docker.io/steveaurel/event-service:1.0.0
           ports:
             - containerPort: 8083
           env:

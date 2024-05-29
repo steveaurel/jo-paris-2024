@@ -7,6 +7,7 @@ import {FormBuilder, FormArray, FormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {EditEventDialogComponent} from "../edit-event-dialog/edit-event-dialog.component";
 import {Router} from "@angular/router";
+import {ShowEventDialogComponent} from "../show-event-dialog/show-event-dialog.component";
 
 @Component({
   selector: 'app-event-management',
@@ -115,6 +116,25 @@ export class EventManagementComponent implements OnInit {
       });
       }
         console.log('The dialog was closed with data:', result);
+
+    });
+  }
+  show(event:Events){
+    const dialogRef = this.dialog.open(ShowEventDialogComponent, {
+      width: '500px',
+      data: { id: event.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadEvents();
+        this.router.navigate(['/dashboard/events']).then(() => {
+          console.log('Navigation to /dashboard/events successful!');
+        }).catch(error => {
+          console.error('Navigation to /dashboard/events failed:', error);
+        });
+      }
+      console.log('The dialog was closed with data:', result);
 
     });
   }

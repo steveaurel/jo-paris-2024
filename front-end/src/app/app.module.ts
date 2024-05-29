@@ -39,6 +39,7 @@ import {MatTableModule} from "@angular/material/table";
 import { EditEventDialogComponent } from './pages/edit-event-dialog/edit-event-dialog.component';
 import { LoginDialogComponent } from './pages/login-dialog/login-dialog.component';
 import { RegisterDialogComponent } from './pages/register-dialog/register-dialog.component';
+import { ShowEventDialogComponent } from './pages/show-event-dialog/show-event-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,6 +60,7 @@ import { RegisterDialogComponent } from './pages/register-dialog/register-dialog
     EditEventDialogComponent,
     LoginDialogComponent,
     RegisterDialogComponent,
+    ShowEventDialogComponent,
   ],
   imports: [
     BrowserModule,
