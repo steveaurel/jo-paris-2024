@@ -15,6 +15,7 @@ spec:
       containers:
         - name: config-service
           image: docker.io/steveaurel/config-service:1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 9999
           env:

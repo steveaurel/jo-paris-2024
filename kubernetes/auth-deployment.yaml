@@ -15,6 +15,7 @@ spec:
       containers:
         - name: auth-service
           image: docker.io/steveaurel/auth-service:1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:

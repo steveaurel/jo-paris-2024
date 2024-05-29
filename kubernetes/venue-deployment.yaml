@@ -15,6 +15,7 @@ spec:
       containers:
         - name: venue-service
           image: docker.io/steveaurel/venue-service:1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8087
           env:
