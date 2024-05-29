@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Run the Maven build
-RUN mvn package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Stage 2: Create the final image using the JAR built in the previous stage
 FROM openjdk:17-oracle

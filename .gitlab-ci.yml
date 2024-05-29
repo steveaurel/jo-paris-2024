@@ -428,7 +428,7 @@ deploy-front-end:
     - az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
     - cd front-end/dist/front-end/browser
     - zip -r ../../front-end.zip .
-    - cd ../../..
+    - cd ../..
     - curl -X POST -u $AZURE_USERNAME:$AZURE_PASSWORD --data-binary @front-end.zip https://$AZURE_APP_NAME.scm.azurewebsites.net/api/zipdeploy
   rules:
     - if: '$CI_COMMIT_MESSAGE =~ /#studi/'
