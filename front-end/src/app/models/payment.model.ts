@@ -1,8 +1,7 @@
-export class Payment {
+export interface Payment {
   id?: number;
-  userID?: number;
-  eventID?: number;
-  offerTypeID?: number;
-  amount?: number;
-  paymentDateTime?: string;
+  amount: number;
+  paymentDateTime: Date;
+  userID: number;
+  offerTypeID: number;
 }

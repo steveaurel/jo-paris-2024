@@ -1,8 +1,8 @@
 import { Location } from './location.model';
 
-export class Venue {
+export interface Venue {
   id?: number;
-  name?: string;
-  capacity?: number;
+  name: string;
+  capacity: number;
   location?: Location;
 }

@@ -31,9 +31,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data:{roles: [Role.ADMIN]},
     children:[
+      {path: 'events', component: EventManagementComponent},
       {path: 'users', component: UserManagementComponent},
-      {path: 'venues', component: VenueManagementComponent},
-      {path: 'events', component: EventManagementComponent}
+      {path: 'venues', component: VenueManagementComponent}
     ]
   },
 

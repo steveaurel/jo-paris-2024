@@ -12,8 +12,8 @@ import {AuthRequest} from "../../models/authrequest.model";
 })
 export class LoginComponent implements OnInit {
 
-  user: User = new User();
-  authRequest: AuthRequest = new AuthRequest();
+  user?: User;
+  authRequest: AuthRequest = { email: '', password: '' };
   faUser = faUserCircle;
   errorMessage: string = "";
 

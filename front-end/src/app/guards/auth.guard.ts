@@ -9,7 +9,7 @@ import {AuthenticationService} from "../services/authentication.service";
 })
 export class AuthGuard implements CanActivate {
 
-  private currentUser: User = new User;
+  private currentUser?: User ;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     this.authenticationService.currentUser.subscribe(data => {

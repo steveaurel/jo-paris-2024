@@ -21,7 +21,7 @@ export class VenueService extends RequestBaseService {
     return this.http.post<Venue>(API_URL, venue, {headers: this.getHeaders});
   }
 
-  updateVenue(id: number | undefined, venue: Venue): Observable<Venue> {
+    updateVenue(id: number | undefined, venue: Venue): Observable<Venue> {
     return this.http.put<Venue>(`${API_URL}/${id}`, venue, {headers: this.getHeaders});
   }
 

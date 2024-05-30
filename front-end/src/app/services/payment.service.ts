@@ -30,7 +30,7 @@ export class PaymentService extends RequestBaseService {
   }
 
   findPaymentsByEventId(eventId: number): Observable<Payment[]> {
-    return this.http.get<Payment[]>(`${API_URL}/by-event/${eventId}`);
+    return this.http.get<Payment[]>(`${API_URL}/by-event/${eventId}`, {headers: this.getHeaders});
   }
 
   findPaymentsByUserId(userId: number): Observable<Payment[]> {

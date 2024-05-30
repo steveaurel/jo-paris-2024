@@ -17,7 +17,7 @@ export class UserService extends RequestBaseService {
     super(authenticationService, http);
   }
 
-  getUserById(userId: number): Observable<User> {
+    getUserById(userId: number | undefined): Observable<User> {
     return this.http.get<User>(`${API_URL}/${userId}`, {headers: this.getHeaders});
   }
 

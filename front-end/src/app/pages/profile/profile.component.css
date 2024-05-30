@@ -1,0 +1,14 @@
+.profile-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.profile-form mat-form-field {
+  flex: 1;
+}
+
+.profile-form button {
+  align-self: center;
+}

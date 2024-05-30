@@ -1,25 +1,28 @@
-import {Component, OnInit} from '@angular/core';
-import {User} from "../../models/user.model";
-import {Router} from "@angular/router";
-import {TicketService} from "../../services/ticket.service";
-import {Ticket} from "../../models/ticket.model";
-import {AuthenticationService} from "../../services/authentication.service";
-import {UserService} from "../../services/user.service";
+import { Component, OnInit } from '@angular/core';
+import { User } from "../../models/user.model";
+import { Router } from "@angular/router";
+import { TicketService } from "../../services/ticket.service";
+import { Ticket } from "../../models/ticket.model";
+import { AuthenticationService } from "../../services/authentication.service";
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
-  user: User = new User();
+  user: User | any;
   ticketList: Ticket[] = [];
   selectedIndex = 0;
-  constructor(private router: Router,
-              private userService: UserService,
-              private ticketService: TicketService,
-              private authenticationService: AuthenticationService) {}
+  displayedColumns: string[] = ['eventName', 'eventDate', 'eventStartTime', 'actions'];
+
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private ticketService: TicketService,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     if (!this.authenticationService.currentUserValue?.id) {
@@ -41,12 +44,12 @@ export class ProfileComponent implements OnInit {
   }
 
   updateProfile() {
-    this.userService.updateUser(this.user?.id, this.user).subscribe(user =>{
+    this.userService.updateUser(this.user?.id, this.user).subscribe(user => {
       this.user = user;
-    })
+    });
   }
 
-  downloadTicket(ticket: any) {
-
+  downloadTicket(ticket: Ticket) {
+    // Implement the logic to download the ticket
   }
 }

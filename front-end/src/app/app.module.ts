@@ -27,7 +27,6 @@ import {MatList, MatListItem} from "@angular/material/list";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDialogModule} from "@angular/material/dialog";
 import {NgOptimizedImage} from "@angular/common";
-import { AdminComponent } from './pages/admin/admin.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import {authInterceptorProviders} from "./interceptors/auth.interceptor";
@@ -50,7 +49,6 @@ import { ShowEventDialogComponent } from './pages/show-event-dialog/show-event-d
     EventComponent,
     EventDetailsComponent,
     ProfileComponent,
-    AdminComponent,
     UnauthorizedComponent,
     NotFoundComponent,
     DashboardComponent,

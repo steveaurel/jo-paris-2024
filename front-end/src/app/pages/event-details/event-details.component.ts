@@ -19,11 +19,11 @@ import {TabService} from "../../services/tab.service";
   styleUrls: ['./event-details.component.css']
 })
 export class EventDetailsComponent implements OnInit {
-  event: Events = new Events();
+  event?: Events  ;
   selectedOfferType?: OfferType;
-  selectedPrice?: number;
-  payment: Payment = new Payment();
-  ticket: Ticket = new Ticket();
+  selectedPrice?: number ;
+  payment: Payment | any ;
+  ticket?: Ticket ;
 
   constructor(
     private eventService: EventService,
@@ -62,7 +62,7 @@ export class EventDetailsComponent implements OnInit {
     if (!this.authenticationService.currentUserValue?.id) {
       const dialogRef = this.dialog.open(LoginDialogComponent, {
         width: '500px',
-        data: { id: this.event.id }
+        data: { id: this.event?.id }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -76,50 +76,54 @@ export class EventDetailsComponent implements OnInit {
   }
 
   performPayment(): void {
-    if (this.eventService.validateEventStatus(this.event.id)) {
-      this.payment.eventID = this.event.id;
-      this.payment.offerTypeID = this.selectedOfferType?.id;
-      this.payment.userID = this.authenticationService.currentUserValue.id;
-      this.payment.amount = this.selectedPrice;
-      this.payment.paymentDateTime = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+    if(this.event) {
+      if (this.eventService.validateEventStatus(this.event.id)) {
+        this.payment.eventID = this.event.id;
+        this.payment.offerTypeID = this.selectedOfferType?.id;
+        this.payment.userID = this.authenticationService.currentUserValue.id;
+        this.payment.amount = this.selectedPrice;
+        this.payment.paymentDateTime = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
 
-      this.paymentService.createPayment(this.payment).subscribe({
-        next: (payment) => {
-          this.payment = payment;
-          this.generateTicket(payment.id)
-          alert('Payment successful.');
-          this.tabService.changeTab(1)
-          this.router.navigate(['/profile']);
-        },
-        error: (err) => {
-          console.error('Payment failed:', err);
-          alert('Payment failed. Please check your details and try again.');
-        }
-      });
-    } else {
-      alert('Event is not available for payments.');
+        this.paymentService.createPayment(this.payment).subscribe({
+          next: (payment) => {
+            this.payment = payment;
+            this.generateTicket(payment.id)
+            alert('Payment successful.');
+            this.tabService.changeTab(1)
+            this.router.navigate(['/profile']);
+          },
+          error: (err) => {
+            console.error('Payment failed:', err);
+            alert('Payment failed. Please check your details and try again.');
+          }
+        });
+      } else {
+        alert('Event is not available for payments.');
+      }
     }
   }
 
   generateTicket(paymentID: number | undefined): void {
-    const ticket: Ticket ={
-      userID : this.authenticationService.currentUserValue.id,
-      eventID: this.event.id,
-      eventName: this.event.name,
-      eventDate: this.event.date,
-      eventStartTime: this.event.startTime,
-      offerTypeID : this.selectedOfferType?.id,
-      paymentID : paymentID,
-      priceAmount: this.selectedPrice
-    }
-    this.ticketService.createTicket(ticket).subscribe({
-      next: (ticket) => {
-        this.ticket = ticket;
-      },
-      error: (err) => {
-        console.error('Failed to create ticket:', err);
+    if (this.event && this.selectedPrice) {
+      const ticket: Ticket = {
+        userID: this.authenticationService.currentUserValue.id,
+        eventID: this.event.id,
+        eventName: this.event.name,
+        eventDate: this.event.date,
+        eventStartTime: this.event.startTime,
+        offerTypeID: this.selectedOfferType?.id,
+        paymentID: paymentID,
+        priceAmount: this.selectedPrice
       }
-    })
+      this.ticketService.createTicket(ticket).subscribe({
+        next: (ticket) => {
+          this.ticket = ticket;
+        },
+        error: (err) => {
+          console.error('Failed to create ticket:', err);
+        }
+      })
+    }
   }
 
   goBackToEvents(): void {

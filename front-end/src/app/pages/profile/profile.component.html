@@ -1,7 +1,7 @@
 <mat-tab-group [(selectedIndex)]="selectedIndex" animationDuration="0ms">
   <mat-tab label="Profile">
     <div class="profile-info">
-      <form>
+      <form class="profile-form">
         <mat-form-field appearance="fill">
           <mat-label>First Name</mat-label>
           <input matInput placeholder="First Name" [(ngModel)]="user.firstName" name="firstName">
@@ -10,33 +10,49 @@
           <mat-label>Last Name</mat-label>
           <input matInput placeholder="Last Name" [(ngModel)]="user.lastName" name="lastName">
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="Email" [(ngModel)]="user.email" name="email">
+          <input matInput placeholder="Email" [(ngModel)]="user.email" name="email" [readonly]="true">
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Role</mat-label>
-          <input matInput placeholder="First Name" [(ngModel)]="user.role" name="role">
+          <input matInput placeholder="Role" [(ngModel)]="user.role" name="role" [readonly]="true">
         </mat-form-field>
-        <!-- Additional form fields as needed -->
         <button mat-raised-button color="primary" (click)="updateProfile()">Update Profile</button>
       </form>
     </div>
   </mat-tab>
+
   <mat-tab label="Tickets">
     <div class="tickets-list">
-      <mat-list>
-        <mat-list-item *ngFor="let ticket of ticketList">
-          <div class="ticket-details">
-            <h3>{{ ticket.eventName }}</h3>
-            <p>Event Date: {{ ticket.eventDate }} at {{ticket.eventStartTime}}</p>
-          </div>
-          <button mat-icon-button (click)="downloadTicket(ticket)">
-            <mat-icon>download</mat-icon>
-          </button>
-        </mat-list-item>
-      </mat-list>
+      <mat-table [dataSource]="ticketList" class="mat-elevation-z8">
+        <ng-container matColumnDef="eventName">
+          <mat-header-cell *matHeaderCellDef>Event Name</mat-header-cell>
+          <mat-cell *matCellDef="let ticket">{{ ticket.eventName }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="eventDate">
+          <mat-header-cell *matHeaderCellDef>Event Date</mat-header-cell>
+          <mat-cell *matCellDef="let ticket">{{ ticket.eventDate }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="eventStartTime">
+          <mat-header-cell *matHeaderCellDef>Event Start Time</mat-header-cell>
+          <mat-cell *matCellDef="let ticket">{{ ticket.eventStartTime }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+          <mat-cell *matCellDef="let ticket">
+            <button mat-icon-button (click)="downloadTicket(ticket)">
+              <mat-icon>download</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
     </div>
   </mat-tab>
 </mat-tab-group>
-

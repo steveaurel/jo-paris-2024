@@ -40,7 +40,7 @@ export class UserManagementComponent implements OnInit{
   changeUserRole(user: User) {
     const newRole = user.role === Role.ADMIN ? Role.USER : Role.ADMIN;
     user.role = newRole;
-    this.userService.updateUser(user.id, user).subscribe({
+    this.userService.updateUser(user?.id, user).subscribe({
       next: (updatedUser) => {
         user.role = newRole;
       },

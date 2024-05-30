@@ -1,1 +1,39 @@
-<p>show-event-dialog works!</p>
+<mat-table [dataSource]="payments" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let payment">
+      <ng-container *ngIf="users[payment.userID]">
+        {{ users[payment.userID].firstName }} {{ users[payment.userID].lastName }}
+      </ng-container>
+      <ng-container *ngIf="!users[payment.userID]">
+        Unknown
+      </ng-container>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+    <mat-cell *matCellDef="let payment">
+      {{ payment.paymentDateTime | date }}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="amount">
+    <mat-header-cell *matHeaderCellDef> Amount </mat-header-cell>
+    <mat-cell *matCellDef="let payment">
+      {{ payment.amount }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<table class="total-amount-table">
+  <thead>
+  <tr>
+    <th>Total Amount</th>
+    <th>{{ getTotalAmount() }}</th>
+  </tr>
+  </thead>
+</table>

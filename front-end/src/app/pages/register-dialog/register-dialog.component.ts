@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {User} from "../../models/user.model";
 import {take, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
+import {Role} from "../../models/role.enum";
 
 @Component({
   selector: 'app-register-dialog',
@@ -54,6 +55,7 @@ export class RegisterDialogComponent implements OnInit {
       const user: User ={
         firstName: formValue.firstName,
         lastName: formValue.lastName,
+        role: Role.USER,
         email: formValue.email,
         password: formValue.password
       };

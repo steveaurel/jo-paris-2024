@@ -8,7 +8,7 @@ import {AuthenticationService} from "./authentication.service";
 })
 export class RequestBaseService {
 
-  protected currentUser: User = new User;
+  protected currentUser: User | undefined ;
 
   protected constructor(protected authenticationService: AuthenticationService, protected http: HttpClient) {
     this.authenticationService.currentUser.subscribe(data => {

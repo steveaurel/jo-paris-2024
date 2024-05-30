@@ -10,7 +10,7 @@ import {Role} from "../../models/role.enum";
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
-  currentUser: User = new User;
+  currentUser?: User ;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
 

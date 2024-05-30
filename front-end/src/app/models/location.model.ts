@@ -1,6 +1,6 @@
-export class Location {
+export interface Location {
   id?: number;
-  address?: string;
-  city?: string;
-  country?: string;
+  address: string;
+  city: string;
+  country: string;
 }

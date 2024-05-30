@@ -5,6 +5,7 @@ import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
 import {take, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
+import {Role} from "../../models/role.enum";
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,7 @@ import {catchError} from "rxjs/operators";
 })
 export class RegisterComponent implements OnInit{
 
-  user: User = new User();
+  user: User = { firstName: '', lastName: '', email: '', password: '', role: Role.USER };
   faUser = faUserCircle;
   errorMessage: string = "";
 

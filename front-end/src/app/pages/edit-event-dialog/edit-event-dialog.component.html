@@ -23,7 +23,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Venue</mat-label>
     <mat-select formControlName="venueID" >
-      <mat-option *ngFor="let venue of venues" [value]="venue?.id">{{ venue.name }}</mat-option>
+      <mat-option *ngFor="let venue of venues" [value]="venue.id">{{ venue.name }}</mat-option>
     </mat-select>
     <input matInput formControlName="venueID">
   </mat-form-field>

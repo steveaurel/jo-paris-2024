@@ -11,7 +11,7 @@ import {EventService} from "../../services/event.service";
   styleUrls: ['./edit-event-dialog.component.css']
 })
 export class EditEventDialogComponent implements OnInit {
-  event: Events = new Events();
+  event: Events | undefined;
   eventForm!: FormGroup;
   venues: any[] = [];
 
@@ -81,7 +81,7 @@ export class EditEventDialogComponent implements OnInit {
   }
 
   onSave(): void {
-    if (this.eventForm.valid) {
+    if (this.eventForm.valid && this.event) {
 
       const formValue = this.eventForm.value;
       const updatedEvent: Events = {
@@ -93,6 +93,8 @@ export class EditEventDialogComponent implements OnInit {
         endTime: formValue.endTime,
         eventStatus: formValue.eventStatus,
         venueID: this.event.venueID,
+        venue:this.event.venue,
+        seatAvailable: this.event.seatAvailable,
         offerTypes: formValue.offerTypes.map((offer: { description: any; seatQuantity: any; price: any; }) => ({
           description: offer.description,
           seatQuantity: offer.seatQuantity,

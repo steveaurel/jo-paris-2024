@@ -1,0 +1,44 @@
+.total-amount-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.total-amount-table th, .total-amount-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.total-amount-table th {
+  background-color: #f5f5f5;
+}
+mat-form-field {
+  width: 100%;
+  margin-top: 8px;
+}
+
+mat-dialog-content {
+  overflow-y: auto;
+  max-height: 65vh;
+}
+
+mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+button {
+  margin: 8px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.mat-icon-button {
+  margin-left: 12px;
+}
+
+.add-offer-type-button {
+  margin-top: 20px;
+}

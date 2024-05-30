@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 export class VenueManagementComponent implements OnInit {
   venues: Venue[] = [];
   filteredVenues: Venue[] = [];
-  newVenue: Venue = { id: 0, name: '', capacity: 0, location: { address: '', city: '', country: '' } };
+  newVenue: Venue = { id: 0, name: '', capacity: 0, location: { id:0, address: '', city: '', country: '' } };
   displayedColumns: string[] = ['name', 'address', 'city', 'country', 'capacity', 'actions'];
 
   constructor(private venueService: VenueService, private router: Router) {}

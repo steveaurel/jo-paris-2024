@@ -33,7 +33,7 @@ export class TicketService extends RequestBaseService {
     return this.http.get<Ticket[]>(`${API_URL}/by-event/${eventId}`, {headers: this.getHeaders});
   }
 
-  findTicketsByUserId(userId: number | undefined): Observable<Ticket[]> {
+  findTicketsByUserId(userId: number): Observable<Ticket[]> {
     return this.http.get<Ticket[]>(`${API_URL}/by-user/${userId}`, {headers: this.getHeaders});
   }
 

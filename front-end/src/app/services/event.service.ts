@@ -53,24 +53,26 @@ export class EventService extends RequestBaseService {
   validateEventStatus(id: number | undefined): Observable<boolean> {
     return this.http.get<boolean>(`${API_URL}/validate/${id}`, {headers: this.getHeaders});
   }
-
-  checkEventAvailability(venueId: number | undefined, startTime: string | undefined, endTime: string | undefined, date: string | undefined): Observable<boolean> {
+  checkEventAvailability(venueId: number, startTime: string, endTime: string, date: string): Observable<boolean> {
     let params = new HttpParams();
 
-    if (venueId !== undefined) {
+    if (venueId > 0) {
       params = params.set('venueID', venueId.toString());
     }
 
-    if (startTime !== undefined) {
+    if (startTime) {
       params = params.set('startTime', startTime);
     }
-    if (endTime !== undefined) {
+
+    if (endTime) {
       params = params.set('endTime', endTime);
     }
-    if (date !== undefined) {
+
+    if (date) {
       params = params.set('date', date);
     }
-    return this.http.get<boolean>(`${API_URL}/check-availability`, {params, headers: this.getHeaders})
+
+    return this.http.get<boolean>(`${API_URL}/check-availability`, { params, headers: this.getHeaders })
       .pipe(
         catchError((error) => {
           console.error('Error checking event availability:', error);
@@ -78,5 +80,6 @@ export class EventService extends RequestBaseService {
         })
       );
   }
+
 
 }

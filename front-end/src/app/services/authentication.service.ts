@@ -4,6 +4,7 @@ import {BehaviorSubject, map, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {AuthRequest} from "../models/authrequest.model";
+import {UserImplementation} from "../models/UserImplementation";
 
 const API_URL = environment.BASE_URL + '/AUTH-SERVICE/auth';
 
@@ -29,7 +30,7 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
-  login(authRequest: AuthRequest): Observable<any> {
+    login(authRequest: AuthRequest | undefined): Observable<any> {
     return this.http.post<User>(API_URL + '/sign-in', authRequest).pipe(
       map(response => {
         if (response) {
@@ -46,7 +47,7 @@ export class AuthenticationService {
     this.currentUserSubject.next(user);
   }
 
-  register(user: User): Observable<any> {
+  register(user: User | undefined): Observable<any> {
     return this.http.post<User>(API_URL + '/sign-up', user).pipe(
       map(response => {
         if (response) {
@@ -60,7 +61,7 @@ export class AuthenticationService {
 
   logout() {
     localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(new User());
+    this.currentUserSubject.next(new UserImplementation());
   }
 
   refreshToken(): Observable<any> {
