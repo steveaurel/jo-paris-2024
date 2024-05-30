@@ -132,6 +132,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.infoevent.authservice.AuthServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

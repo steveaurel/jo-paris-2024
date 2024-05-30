@@ -110,6 +110,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.infoevent.ticketservice.TicketServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

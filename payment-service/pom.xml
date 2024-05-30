@@ -99,6 +99,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.infoevent.paymentservice.PaymentServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

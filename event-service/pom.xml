@@ -102,6 +102,7 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
+						<mainClass>com.infoevent.eventservice.EventServiceApplication</mainClass>
 					</excludes>
 				</configuration>
 			</plugin>
